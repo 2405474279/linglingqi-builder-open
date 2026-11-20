@@ -1,0 +1,6 @@
+/linglingqi-builder-open-v*.zip
+/docs/plans/
+.env
+*.log
+*.sqlite
+node_modules/
