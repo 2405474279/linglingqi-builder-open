@@ -7,6 +7,7 @@ use Elementor\Modules\AtomicWidgets\Module as AtomicWidgetsModule;
 use Elementor\Modules\Variables\Classes\Variable_Types_Registry;
 use Elementor\Modules\Variables\PropTypes\Color_Variable_Prop_Type;
 use Elementor\Modules\Variables\PropTypes\Font_Variable_Prop_Type;
+use Elementor\Modules\Variables\PropTypes\Size_Variable_Prop_Type;
 use Elementor\Modules\Variables\Storage\Constants;
 use Elementor\Plugin;
 
@@ -62,6 +63,7 @@ class Module extends BaseModule {
 		return [
 			Color_Variable_Prop_Type::get_key() => 100000,
 			Font_Variable_Prop_Type::get_key() => 100000,
+			Size_Variable_Prop_Type::get_key() => 100000,
 		];
 	}
 

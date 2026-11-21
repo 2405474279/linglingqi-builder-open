@@ -2,6 +2,7 @@
 namespace Elementor\Core;
 
 use Elementor\Core\Base\Module;
+use Elementor\Modules\AtomicWidgets\OptIn\Opt_In;
 use Elementor\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -39,6 +40,8 @@ class Modules_Manager {
 	 * @access public
 	 */
 	public function __construct() {
+		( new Opt_In() )->init();
+
 		$modules_namespace_prefix = $this->get_modules_namespace_prefix();
 
 		foreach ( $this->get_modules_names() as $module_name ) {
@@ -113,6 +116,7 @@ class Modules_Manager {
 			'default-styles',
 			'variables',
 			'design-system-sync',
+			'local-blocks',
 			'editor-one',
 			'assets-manager',
 		];

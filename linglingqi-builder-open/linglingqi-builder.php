@@ -2,7 +2,7 @@
 /**
  * Plugin Name: 凌凌漆可视化编辑器（开源版）
  * Description: WordPress 可视化编辑器，支持响应式布局及 Elementor 基础和常规组件。
- * Version: 1.1.0
+ * Version: 1.2.0-rc.1
  * Author: 凌凌漆
  * Requires PHP: 7.4
  * Requires at least: 6.8
@@ -34,6 +34,13 @@ if ( is_multisite() ) {
 foreach ( $llq_open_active_plugins as $llq_open_plugin_file ) {
 	$llq_open_plugin_name = basename( $llq_open_plugin_file );
 	if ( $llq_open_plugin_file !== plugin_basename( __FILE__ ) && in_array( $llq_open_plugin_name, [ 'elementor.php', 'linglingqi-builder.php' ], true ) ) {
+		register_activation_hook( __FILE__, static function () {
+			wp_die(
+				esc_html__( '请先停用其他版本的 Elementor 或凌凌漆，再启用凌凌漆开源版。', 'elementor' ),
+				'',
+				[ 'response' => 409, 'back_link' => true ]
+			);
+		} );
 		add_action( 'admin_notices', static function () {
 			echo '<div class="notice notice-warning"><p>' . esc_html__( '请先停用其他版本的 Elementor 或凌凌漆，再使用凌凌漆开源版。', 'elementor' ) . '</p></div>';
 		} );
@@ -44,7 +51,7 @@ if ( defined( 'ELEMENTOR_VERSION' ) ) {
 	return;
 }
 
-define( 'ELEMENTOR_VERSION', '1.1.0' );
+define( 'ELEMENTOR_VERSION', '1.2.0-rc.1' );
 
 /**
  * Compatibility baseline of the upstream codebase this build is derived from.
@@ -70,6 +77,41 @@ if ( defined( 'ELEMENTOR_TESTS' ) && ELEMENTOR_TESTS ) {
 define( 'ELEMENTOR_MODULES_PATH', plugin_dir_path( ELEMENTOR__FILE__ ) . '/modules' );
 define( 'ELEMENTOR_ASSETS_PATH', ELEMENTOR_PATH . 'assets/' );
 define( 'ELEMENTOR_ASSETS_URL', ELEMENTOR_URL . 'assets/' );
+
+/**
+ * Stop dashboard activation before another Elementor entry point is included.
+ */
+function linglingqi_open_guard_editor_activation() {
+	$action = isset( $_REQUEST['action'] ) && is_string( $_REQUEST['action'] )
+		? sanitize_key( wp_unslash( $_REQUEST['action'] ) )
+		: '';
+
+	if ( 'activate' === $action && isset( $_REQUEST['plugin'] ) && is_string( $_REQUEST['plugin'] ) ) {
+		$plugin = sanitize_text_field( wp_unslash( $_REQUEST['plugin'] ) );
+		$plugins = [ $plugin ];
+		$nonce_action = 'activate-plugin_' . $plugin;
+	} elseif ( 'activate-selected' === $action && isset( $_POST['checked'] ) && is_array( $_POST['checked'] ) ) {
+		$plugins = wp_unslash( $_POST['checked'] );
+		$nonce_action = 'bulk-plugins';
+	} else {
+		return;
+	}
+
+	foreach ( $plugins as $plugin ) {
+		if ( ! is_string( $plugin ) || ! current_user_can( 'activate_plugin', $plugin ) ||
+			ELEMENTOR_PLUGIN_BASE === $plugin || ! in_array( basename( $plugin ), [ 'elementor.php', 'linglingqi-builder.php' ], true ) ) {
+			continue;
+		}
+
+		check_admin_referer( $nonce_action );
+		wp_die(
+			esc_html__( '请先停用凌凌漆开源版，再启用其他版本的 Elementor 或凌凌漆。', 'elementor' ),
+			'',
+			[ 'response' => 409, 'back_link' => true ]
+		);
+	}
+}
+add_action( 'load-plugins.php', 'linglingqi_open_guard_editor_activation' );
 
 /**
  * Load the bundled translation catalog.

@@ -143,21 +143,24 @@ class Variable {
 	 * @throws InvalidVariable If the variable is not valid.
 	 */
 	public function apply_changes( array $data ): void {
-		$this->validate();
+		$this->validate( false );
 
+		$candidate = clone $this;
 		$allowed_fields = [ 'label', 'value', 'order', 'type', 'sync_to_v3' ];
-		$has_changes = $this->maybe_apply_type( $data );
+		$has_changes = $candidate->maybe_apply_type( $data );
 
 		foreach ( $allowed_fields as $field ) {
 			if ( isset( $data[ $field ] ) ) {
-				$this->data[ $field ] = $data[ $field ];
+				$candidate->data[ $field ] = $data[ $field ];
 
 				$has_changes = true;
 			}
 		}
 
 		if ( $has_changes ) {
-			$this->data['updated_at'] = $this->now();
+			$candidate->validate( isset( $data['value'] ) || $candidate->type() !== $this->type() );
+			$candidate->data['updated_at'] = $this->now();
+			$this->data = $candidate->data;
 		}
 	}
 
@@ -165,13 +168,24 @@ class Variable {
 	 * @return bool True if the variable is valid, throws an exception otherwise.
 	 * @throws InvalidVariable If the variable is not valid.
 	 */
-	public function validate(): bool {
+	public function validate( bool $validate_size_value = true ): bool {
 		if ( strpos( $this->label(), ' ' ) !== false ) {
 			throw new InvalidVariable( 'Label cannot contain spaces' );
 		}
 
 		if ( strlen( $this->label() ) > 50 ) {
 			throw new InvalidVariable( 'Label cannot be longer than 50 characters' );
+		}
+
+		if ( Size_Variable_Prop_Type::get_key() === $this->type() ) {
+			$value = $this->value();
+			if ( $validate_size_value && ( ! is_string( $value ) || ! preg_match( '/^-?(?:\d+|\d*\.\d+)(?:px|em|rem|%|vw|vh|ch|vmin|vmax)$/iD', $value ) ) ) {
+				throw new InvalidVariable( 'Size needs a number followed by a length unit, such as 16px or 1rem' );
+			}
+
+			if ( ! preg_match( '/^[-_\p{L}][-\p{L}\p{N}_]*$/uD', $this->label() ) ) {
+				throw new InvalidVariable( 'Size variable name must be a valid CSS identifier' );
+			}
 		}
 
 		return true;

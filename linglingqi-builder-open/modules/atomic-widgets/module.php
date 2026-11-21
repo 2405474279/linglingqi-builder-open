@@ -5,6 +5,7 @@ namespace Elementor\Modules\AtomicWidgets;
 use Elementor\Core\Base\Module as BaseModule;
 use Elementor\Core\Common\Modules\Ajax\Module as Ajax;
 use Elementor\Core\Experiments\Manager as Experiments_Manager;
+use Elementor\Modules\AtomicWidgets\OptIn\Opt_In;
 use Elementor\Elements_Manager;
 use Elementor\Modules\AtomicWidgets\Ajax\Render_Element_Action;
 use Elementor\Modules\AtomicWidgets\DynamicTags\Dynamic_Prop_Type;
@@ -240,7 +241,9 @@ class Module extends BaseModule {
 			'title' => esc_html__( 'Atomic Widgets', 'elementor' ),
 			'description' => esc_html__( 'Enable atomic widgets.', 'elementor' ),
 			'hidden' => true,
-			'default' => Experiments_Manager::STATE_INACTIVE,
+			'default' => Plugin::$instance->experiments->is_feature_active( Opt_In::EXPERIMENT_NAME )
+				? Experiments_Manager::STATE_ACTIVE
+				: Experiments_Manager::STATE_INACTIVE,
 			'release_status' => Experiments_Manager::RELEASE_STATUS_BETA,
 			'mutable' => false,
 		];

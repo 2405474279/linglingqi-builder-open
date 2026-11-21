@@ -1,0 +1,103 @@
+{
+    "editor": {
+        "name": "LingLingQi Open",
+        "version": "1.2.0-rc.1",
+        "compatibility_baseline": "4.3.6"
+    },
+    "source": "Native document published in the editor on an isolated WordPress installation",
+    "global_classes": {
+        "g-0a6d283": {
+            "id": "g-0a6d283",
+            "label": "llq-feature-card",
+            "type": "class",
+            "variants": [
+                {
+                    "meta": {
+                        "breakpoint": "desktop",
+                        "state": null
+                    },
+                    "props": {
+                        "padding": {
+                            "$$type": "global-size-variable",
+                            "value": "e-gv-9fce75b"
+                        },
+                        "border-radius": {
+                            "$$type": "size",
+                            "value": {
+                                "size": 26,
+                                "unit": "px"
+                            }
+                        }
+                    },
+                    "custom_css": null
+                }
+            ]
+        },
+        "g-ec2ca07": {
+            "id": "g-ec2ca07",
+            "label": "llq-brand-button",
+            "type": "class",
+            "variants": [
+                {
+                    "meta": {
+                        "breakpoint": "desktop",
+                        "state": null
+                    },
+                    "props": {
+                        "background": {
+                            "$$type": "background",
+                            "value": {
+                                "color": {
+                                    "$$type": "global-color-variable",
+                                    "value": "e-gv-295a5c3"
+                                }
+                            }
+                        }
+                    },
+                    "custom_css": null
+                }
+            ]
+        }
+    },
+    "variables": {
+        "e-gv-234dec3": {
+            "type": "global-size-variable",
+            "label": "llq-card-heading-size",
+            "value": "22px",
+            "order": 3
+        },
+        "e-gv-9fce75b": {
+            "type": "global-size-variable",
+            "label": "llq-card-space",
+            "value": "24px",
+            "order": 2
+        },
+        "e-gv-295a5c3": {
+            "type": "global-color-variable",
+            "label": "llq-brand",
+            "value": "#146b70",
+            "order": 1
+        }
+    },
+    "breakpoints": {
+        "desktop": {
+            "default": true
+        },
+        "mobile": {
+            "width_px": 767,
+            "direction": "max"
+        },
+        "tablet": {
+            "width_px": 1024,
+            "direction": "max"
+        }
+    },
+    "site_links": {
+        "https://example.invalid/": "target_wordpress_home"
+    },
+    "media": {
+        "https://example.invalid/wp-content/plugins/linglingqi-builder-open/assets/images/linglingqi-presets/coast.jpg": "linglingqi-builder-open/assets/images/linglingqi-presets/coast.jpg",
+        "https://example.invalid/wp-content/plugins/linglingqi-builder-open/assets/images/linglingqi-presets/structure.jpg": "linglingqi-builder-open/assets/images/linglingqi-presets/structure.jpg",
+        "https://example.invalid/wp-content/plugins/linglingqi-builder-open/assets/images/linglingqi-presets/dunes.jpg": "linglingqi-builder-open/assets/images/linglingqi-presets/dunes.jpg"
+    }
+}

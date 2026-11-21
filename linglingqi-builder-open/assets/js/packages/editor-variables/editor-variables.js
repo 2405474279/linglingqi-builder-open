@@ -3266,6 +3266,27 @@ react = __toESM(react);
 //#region packages/packages/core/editor-variables/src/prop-types/size-variable-prop-type.ts
 	var sizeVariablePropTypeUtil = (0, _elementor_editor_props.createPropUtils)("global-size-variable", _elementor_schema.z.string());
 
+	var sizeVariableLength = /^(-?(?:\d+|\d*\.\d+))(px|em|rem|%|vw|vh|ch|vmin|vmax)$/i;
+	var SizeVariableField = ({ value, onChange, onValidationChange, onKeyDown }) => {
+		const [input, setInput] = (0, react.useState)(value);
+		const label = (0, _wordpress_i18n.__)("Size value (e.g. 16px or 1rem)", "elementor");
+		return react.createElement(_elementor_ui.TextField, {
+			value: input,
+			placeholder: "16px",
+			inputProps: { "aria-label": label },
+			size: "small",
+			fullWidth: true,
+			onKeyDown,
+			onChange: (event) => {
+				const next = event.target.value;
+				const valid = sizeVariableLength.test(next.trim());
+				setInput(next);
+				if (valid) onChange(next.trim());
+				onValidationChange?.(valid ? "" : label);
+			}
+		});
+	};
+
 //#endregion
 //#region packages/packages/core/editor-variables/src/transformers/empty-transformer.tsx
 	var EmptyTransformer = (0, _elementor_editor_canvas.createTransformer)((_value) => {
@@ -3314,23 +3335,28 @@ react = __toESM(react);
 			variableType: "font",
 			defaultValue: "Roboto"
 		});
-		const legacySizeVariable = {
+		registerVariableType({
+			key: sizeVariablePropTypeUtil.key,
+			icon: _elementor_icons.ExpandDiagonalIcon,
+			valueField: SizeVariableField,
+			propTypeUtil: sizeVariablePropTypeUtil,
+			fallbackPropTypeUtil: _elementor_editor_props.sizePropTypeUtil,
+			variableType: "size",
+			defaultValue: "0px",
+			valueTransformer: (value) => {
+				const match = sizeVariableLength.exec(value);
+				return match ? { size: Number(match[1]), unit: match[2].toLowerCase() } : { size: 0, unit: "px" };
+			}
+		});
+		registerVariableType({
+			key: "global-custom-size-variable",
 			isActive: false,
 			icon: _elementor_icons.ExpandDiagonalIcon,
-			propTypeUtil: sizeVariablePropTypeUtil,
+			propTypeUtil: customSizeVariablePropTypeUtil,
 			fallbackPropTypeUtil: _elementor_editor_props.sizePropTypeUtil,
 			styleTransformer: EmptyTransformer,
 			variableType: "size",
 			selectionFilter: () => []
-		};
-		registerVariableType({
-			...legacySizeVariable,
-			key: sizeVariablePropTypeUtil.key,
-			defaultValue: "0px"
-		});
-		registerVariableType({
-			...legacySizeVariable,
-			key: "global-custom-size-variable"
 		});
 	}
 

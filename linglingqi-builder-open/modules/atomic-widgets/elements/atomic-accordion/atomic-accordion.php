@@ -63,6 +63,10 @@ class Atomic_Accordion extends Atomic_Element_Base {
 		return esc_html__( 'Accordion', 'elementor' );
 	}
 
+	protected function should_show_in_panel() {
+		return false;
+	}
+
 	public function get_keywords() {
 		return [ 'ato', 'atom', 'atoms', 'atomic', 'accordion', 'faq', 'collapse' ];
 	}

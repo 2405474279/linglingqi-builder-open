@@ -1,0 +1,133 @@
+.llq-blocks-dialog {
+	width: min(44rem, calc(100vw - 2rem));
+	max-height: min(42rem, calc(100vh - 2rem));
+	padding: 0;
+	border: 1px solid var(--e-a-border-color, #d0d5df);
+	border-radius: 12px;
+	background: var(--e-a-bg-default, #fff);
+	color: var(--e-a-color-txt, #222);
+	box-shadow: 0 20px 60px rgb(0 0 0 / 28%);
+}
+
+.llq-blocks-dialog::backdrop {
+	background: rgb(0 0 0 / 48%);
+}
+
+.llq-blocks-dialog h2,
+.llq-blocks-dialog h3,
+.llq-blocks-dialog p {
+	margin: 0;
+}
+
+.llq-blocks-dialog h2 {
+	font-size: 1.25rem;
+}
+
+.llq-blocks-dialog h3 {
+	font-size: 1rem;
+}
+
+.llq-blocks-header {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	justify-content: space-between;
+	padding: 1rem 1.25rem;
+	border-bottom: 1px solid var(--e-a-border-color, #d0d5df);
+	background: inherit;
+}
+
+.llq-blocks-content {
+	display: grid;
+	gap: 1.25rem;
+	padding: 1rem 1.25rem 1.25rem;
+}
+
+.llq-blocks-fields {
+	min-inline-size: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.llq-blocks-status:not(:empty) {
+	margin: 1rem 1.25rem 0;
+}
+
+.llq-blocks-section,
+.llq-blocks-list {
+	display: grid;
+	gap: 0.5rem;
+}
+
+.llq-blocks-header,
+.llq-blocks-row,
+.llq-blocks-form,
+.llq-blocks-pagination {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.llq-blocks-row {
+	padding: 0.5rem;
+	border: 1px solid var(--e-a-border-color, #d0d5df);
+	border-radius: 8px;
+}
+
+.llq-blocks-name {
+	flex: 1 0 12rem;
+	overflow-wrap: anywhere;
+}
+
+.llq-blocks-form label {
+	display: flex;
+	flex: 1 1 12rem;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.llq-blocks-form input {
+	flex: 1;
+	min-width: 7rem;
+	padding: 0.45rem;
+	border: 1px solid var(--e-a-border-color, #d0d5df);
+	border-radius: 5px;
+	background: var(--e-a-bg-default, #fff);
+	color: inherit;
+}
+
+.llq-blocks-row-form {
+	width: 100%;
+}
+
+.llq-blocks-dialog button {
+	min-height: 2rem;
+	padding: 0.35rem 0.65rem;
+	border: 1px solid var(--e-a-border-color, #d0d5df);
+	border-radius: 5px;
+	background: var(--e-a-bg-default, #fff);
+	color: inherit;
+	cursor: pointer;
+}
+
+.llq-blocks-dialog .llq-blocks-primary {
+	border-color: #155acb;
+	background: #155acb;
+	color: #fff;
+}
+
+.llq-blocks-dialog button:disabled {
+	opacity: 0.55;
+	cursor: default;
+}
+
+.llq-blocks-dialog :is(button, input):focus-visible {
+	outline: 2px solid #2877da;
+	outline-offset: 2px;
+}
+
+.llq-blocks-pagination {
+	justify-content: flex-end;
+}

@@ -59,6 +59,10 @@ class Atomic_Tabs extends Atomic_Element_Base {
 		return esc_html__( 'Tabs', 'elementor' );
 	}
 
+	protected function should_show_in_panel() {
+		return false;
+	}
+
 	public function get_keywords() {
 		return [ 'ato', 'atom', 'atoms', 'atomic' ];
 	}
