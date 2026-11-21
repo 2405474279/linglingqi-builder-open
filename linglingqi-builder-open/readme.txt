@@ -2,7 +2,7 @@
 Tags: builder, drag-and-drop, editor, layout
 Requires at least: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -10,7 +10,7 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 == Description ==
 
-使用容器、标题、文本、图片、按钮等常用组件编辑文章和页面。支持拖拽、响应式设置、修订、草稿、预览与发布。站点样式和页面内容保存在自己的 WordPress 站点中。
+使用容器以及标题、文本、图库、选项卡、手风琴等 Elementor 基础和常规组件编辑文章和页面。支持拖拽、响应式设置、修订、草稿、预览与发布。站点样式和页面内容保存在自己的 WordPress 站点中。
 
 == Installation ==
 
@@ -19,6 +19,10 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 3. 添加组件并预览，保存草稿或发布。
 
 == Changelog ==
+
+= 1.1.0 =
+* 补齐基础和常规组件，包括地图、图片轮播、图库、图标列表、选项卡、手风琴和评级。
+* 使用更新后的凌凌漆 Logo。
 
 = 1.0.0 =
 * 首个开源版，提供基础可视化页面和文章编辑能力。

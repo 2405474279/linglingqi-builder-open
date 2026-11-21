@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: 凌凌漆可视化编辑器（开源版）
- * Description: WordPress 基础可视化编辑器，支持页面编辑、响应式布局和常用组件。
- * Version: 1.0.0
+ * Description: WordPress 可视化编辑器，支持响应式布局及 Elementor 基础和常规组件。
+ * Version: 1.1.0
  * Author: 凌凌漆
  * Requires PHP: 7.4
  * Requires at least: 6.8
@@ -44,7 +44,7 @@ if ( defined( 'ELEMENTOR_VERSION' ) ) {
 	return;
 }
 
-define( 'ELEMENTOR_VERSION', '1.0.0' );
+define( 'ELEMENTOR_VERSION', '1.1.0' );
 
 /**
  * Compatibility baseline of the upstream codebase this build is derived from.
@@ -52,7 +52,7 @@ define( 'ELEMENTOR_VERSION', '1.0.0' );
  * Elementor gates several features on "was this site first installed at or
  * after version X". Renumbering the plugin to 1.0.0 would otherwise make
  * every install look ancient and silently disable flex/grid containers and
- * other `new_site` gated features. The public version stays 1.0.0.
+ * other `new_site` gated features.
  */
 define( 'ELEMENTOR_COMPAT_BASELINE', '4.3.6' );
 define( 'ELEMENTOR_MINIMUM_WP_VERSION', '6.8' );

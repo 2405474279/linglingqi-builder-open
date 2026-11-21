@@ -1,20 +1,20 @@
 # 凌凌漆可视化编辑器（开源版）
 
-首版为 1.0.0，基于 Elementor 4.3.6，面向 WordPress 的页面和文章编辑。
+当前版本为 1.1.0，基于 Elementor 4.3.6，面向 WordPress 的页面和文章编辑。
 
-- 使用容器安排页面布局，添加标题、文本、图片、视频、按钮、图标、分隔线和间距。
+- 使用容器安排布局，并添加 Elementor 的「基础」和「常规」组件，包括地图、图库、选项卡、手风琴和评级。
 - 支持响应式设置、页面预览、草稿、发布及修订。
 - 页面内容和全局样式存储在当前 WordPress 站点。
 
 ## 安装和文档
 
-在独立 WordPress 站点上传 ZIP 并启用，然后从「页面」进入「使用凌凌漆编辑」。同一站点只启用一个 Elementor 或凌凌漆版本。[下载 1.0.0 安装包](https://github.com/2405474279/linglingqi-builder-open/releases/download/v1.0.0/linglingqi-builder-open-v1.0.0.zip)
+在独立 WordPress 站点上传 ZIP 并启用，然后从「页面」进入「使用凌凌漆编辑」。同一站点只启用一个 Elementor 或凌凌漆版本。[下载 1.1.0 安装包](https://github.com/2405474279/linglingqi-builder-open/releases/download/v1.1.0/linglingqi-builder-open-v1.1.0.zip)
 
 | 文档 | 适合用来做什么 |
 | --- | --- |
 | [安装与使用](docs/安装与使用.md) | 安装、编辑页面、预览、保存和排查常见问题 |
 | [Agent 建站指南](docs/Agent使用指南.md) | 自动化建页、修改现有内容、发布验收和交付 |
 | [开发文档](docs/开发文档.md) | 了解源码结构、开发独立组件、修改插件和回归测试 |
-| [版本与兼容说明](docs/版本与兼容说明.md) | 核对首版范围、兼容条件、安装包校验值和发版流程 |
+| [版本与兼容说明](docs/版本与兼容说明.md) | 核对版本范围、兼容条件、安装包校验值和发版流程 |
 
 `linglingqi-builder-open/` 是独立插件源码目录。插件随附 GPLv3 文本及第三方库现有许可证。

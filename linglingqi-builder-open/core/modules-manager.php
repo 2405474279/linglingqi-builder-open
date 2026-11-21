@@ -95,6 +95,8 @@ class Modules_Manager {
 			'admin-top-bar',
 			'element-manager',
 			'nested-elements',
+			'nested-tabs',
+			'nested-accordion',
 			'container-converter',
 			'web-cli',
 			'performance-lab',
