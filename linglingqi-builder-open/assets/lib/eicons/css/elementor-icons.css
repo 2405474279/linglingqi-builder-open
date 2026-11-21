@@ -103,14 +103,6 @@
   content: "\e811";
 }
 
-.eicon-elementor:before {
-  content: "\e812";
-}
-
-.eicon-elementor-circle:before {
-  content: "\e813";
-}
-
 .eicon-pojome:before {
   content: "\e814";
 }
@@ -2091,6 +2083,13 @@
   content: "\e8ac";
 }
 
+.eicon-elementor:before,
+.eicon-elementor-circle:before,
 .eicon-elementor-square:before {
-  content: "\e813";
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background: url("../../../images/logo-panel.svg") center / contain no-repeat;
+  vertical-align: -.1em;
 }

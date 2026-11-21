@@ -81,7 +81,7 @@ class Settings extends Settings_Page {
 			self::MENU_CAPABILITY_EDIT_POSTS,
 			self::PAGE_ID,
 			[ $this, 'display_home_screen' ],
-			'',
+			ELEMENTOR_ASSETS_URL . 'images/logo-panel.svg',
 			'58.5'
 		);
 

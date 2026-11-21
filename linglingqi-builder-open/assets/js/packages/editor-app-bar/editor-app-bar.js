@@ -287,15 +287,21 @@ react = __toESM(react);
 
 //#endregion
 //#region packages/packages/core/editor-app-bar/src/components/ui/toolbar-logo.tsx
-	var ElementorLogo = (props) => {
-		return /* @__PURE__ */ react.createElement(_elementor_ui.SvgIcon, {
+	var LinglingqiLogo = (props) => {
+		return react.createElement(_elementor_ui.SvgIcon, {
 			viewBox: "0 0 32 32",
 			...props
-		}, /* @__PURE__ */ react.createElement("g", null, /* @__PURE__ */ react.createElement("circle", {
-			cx: "16",
-			cy: "16",
-			r: "16"
-		}), /* @__PURE__ */ react.createElement("path", { d: "M11.7 9H9V22.3H11.7V9Z" }), /* @__PURE__ */ react.createElement("path", { d: "M22.4 9H9V11.7H22.4V9Z" }), /* @__PURE__ */ react.createElement("path", { d: "M22.4 14.4004H9V17.1004H22.4V14.4004Z" }), /* @__PURE__ */ react.createElement("path", { d: "M22.4 19.6992H9V22.3992H22.4V19.6992Z" })));
+		}, react.createElement("image", {
+			href: window.elementorCommonConfig.urls.assets + "images/logo-panel.svg",
+			width: 32,
+			height: 32
+		}), react.createElement("path", {
+			d: "M7 10h18M7 16h18M7 22h18",
+			fill: "none",
+			stroke: "currentColor",
+			strokeWidth: 2,
+			strokeLinecap: "round"
+		}));
 	};
 	var StyledToggleButton = (0, _elementor_ui.styled)(_elementor_ui.ToggleButton)(({ theme }) => ({
 		padding: 0,
@@ -304,19 +310,14 @@ react = __toESM(react);
 		"&.MuiToggleButton-root:hover": { backgroundColor: "initial" },
 		"&.MuiToggleButton-root.Mui-selected": { backgroundColor: "initial" }
 	}));
-	var StyledElementorLogo = (0, _elementor_ui.styled)(ElementorLogo, { shouldForwardProp: (prop) => prop !== "showMenuIcon" })(({ theme, showMenuIcon }) => ({ "& path": {
-		fill: theme.palette.background.default,
-		transition: "all 0.2s linear",
-		transformOrigin: "bottom left",
-		"&:first-of-type": {
-			transitionDelay: !showMenuIcon && "0.2s",
-			transform: showMenuIcon && "translateY(-9px) scaleY(0)"
-		},
-		"&:not(:first-of-type)": { transform: !showMenuIcon && `translateX(${theme.direction === "rtl" ? "4" : "9"}px) scaleX(0.6)` },
-		"&:nth-of-type(2)": { transitionDelay: showMenuIcon ? "0" : "0.2s" },
-		"&:nth-of-type(3)": { transitionDelay: "0.1s" },
-		"&:nth-of-type(4)": { transitionDelay: showMenuIcon ? "0.2s" : "0" }
-	} }));
+	var StyledLinglingqiLogo = (0, _elementor_ui.styled)(LinglingqiLogo, { shouldForwardProp: (prop) => prop !== "showMenuIcon" })(({ showMenuIcon }) => ({
+		"& image, & path": { transition: "opacity 160ms ease" },
+		"& image": { opacity: showMenuIcon ? 0 : 1 },
+		"& path": { opacity: showMenuIcon ? 1 : 0 },
+		"@media (prefers-reduced-motion: reduce)": {
+			"& image, & path": { transition: "none" }
+		}
+	}));
 	function ToolbarLogo(props) {
 		const [isHoverState, setIsHoverState] = (0, react.useState)(false);
 		const showMenuIcon = props.selected || isHoverState;
@@ -326,10 +327,10 @@ react = __toESM(react);
 			size: "large",
 			onMouseEnter: () => setIsHoverState(true),
 			onMouseLeave: () => setIsHoverState(false)
-		}, /* @__PURE__ */ react.createElement(StyledElementorLogo, {
+		}, /* @__PURE__ */ react.createElement(StyledLinglingqiLogo, {
 			fontSize: "large",
 			showMenuIcon,
-			titleAccess: (0, _wordpress_i18n.__)("Elementor Logo", "elementor")
+			titleAccess: (0, _wordpress_i18n.__)("凌凌漆菜单", "elementor")
 		}));
 	}
 

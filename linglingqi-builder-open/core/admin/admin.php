@@ -226,14 +226,7 @@ class Admin extends App {
 					<?php echo esc_html__( '使用凌凌漆编辑', 'elementor' ); ?>
 				</div>
 				<div class="elementor-loader-wrapper">
-					<div class="elementor-loader">
-						<div class="elementor-loader-boxes">
-							<div class="elementor-loader-box"></div>
-							<div class="elementor-loader-box"></div>
-							<div class="elementor-loader-box"></div>
-							<div class="elementor-loader-box"></div>
-						</div>
-					</div>
+					<div class="elementor-loader" aria-hidden="true"></div>
 					<div class="elementor-loading-title"><?php echo esc_html__( 'Loading', 'elementor' ); ?></div>
 				</div>
 			</a>

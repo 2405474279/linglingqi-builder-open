@@ -1,8 +1,15 @@
 #wp-admin-bar-elementor_edit_page > .ab-item::before {
-  content: "\e813";
-  font-family: eicons;
-  inset-block-start: 3px;
-  font-size: 18px;
+  content: "";
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin-inline-end: 6px;
+  inset-block-start: 7px;
+  /* WordPress resets background images on admin toolbar pseudo-elements. */
+  background-image: url("../images/logo-panel.svg") !important;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 #wp-admin-bar-elementor_edit_page .ab-submenu .ab-item {
   display: flex;

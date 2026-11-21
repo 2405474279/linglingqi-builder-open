@@ -8,7 +8,7 @@ __( 'Your Feedback', 'elementor' );
 __( 'Submit Another Feedback', 'elementor' );
 __( 'Submit', 'elementor' );
 __( 'Connect to Elementor', 'elementor' );
-__( 'Elementor Logo', 'elementor' );
+__( '凌凌漆菜单', 'elementor' );
 __( 'More', 'elementor' );
 __( 'Angie', 'elementor' );
 __(

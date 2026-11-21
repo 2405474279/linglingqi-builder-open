@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <style>
+    .halo { transform-origin: center; animation: pulse 2.4s ease-in-out infinite; }
+    .trail {
+      stroke-dasharray: 22 78;
+      stroke-dashoffset: 22;
+      animation: sweep 2.4s cubic-bezier(.35, .06, .55, .96) infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: .3; transform: scale(.94); }
+      52% { opacity: .8; transform: scale(1.04); }
+    }
+    @keyframes sweep {
+      0%, 12% { stroke-dashoffset: 22; }
+      82%, 100% { stroke-dashoffset: -100; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .halo { animation: none; opacity: .4; }
+      .trail { display: none; }
+    }
+  </style>
+  <defs>
+    <radialGradient id="halo">
+      <stop stop-color="#07ddff" stop-opacity=".4"/>
+      <stop offset=".61" stop-color="#1465ff" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#1465ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-15%" y="-30%" width="130%" height="160%">
+      <feGaussianBlur stdDeviation="13" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="blade" x1="15%" y1="100%" x2="85%" y2="0%">
+      <stop stop-color="#1530dc"/>
+      <stop offset=".37" stop-color="#0857fc"/>
+      <stop offset=".76" stop-color="#00cdec"/>
+      <stop offset="1" stop-color="#8effff"/>
+    </linearGradient>
+    <linearGradient id="orbit" x1="0%" y1="75%" x2="100%" y2="25%">
+      <stop stop-color="#08d9ff"/>
+      <stop offset=".26" stop-color="#0752f3"/>
+      <stop offset=".72" stop-color="#00b4ec"/>
+      <stop offset="1" stop-color="#57faff"/>
+    </linearGradient>
+    <linearGradient id="base" x1="0%" y1="70%" x2="100%" y2="30%">
+      <stop stop-color="#162bdc"/>
+      <stop offset=".37" stop-color="#0873fa"/>
+      <stop offset=".82" stop-color="#00cfee"/>
+      <stop offset="1" stop-color="#77fcff"/>
+    </linearGradient>
+  </defs>
+  <circle class="halo" cx="500" cy="500" r="475" fill="url(#halo)"/>
+  <path fill="url(#blade)" d="M248 720 390 266Q396 241 423 227L658 103Q679 92 685 109Q689 117 683 132L525 621C441 661 345 701 248 720Z"/>
+  <path fill="#0e38da" opacity=".22" d="M248 720 281 613C383 521 481 442 607 370L525 621C441 661 345 701 248 720Z"/>
+  <path fill="url(#base)" d="M241 827C361 801 470 755 565 710H828Q846 710 858 724L982 879Q994 899 970 901H335Q301 901 278 873Z"/>
+  <path fill="url(#orbit)" d="M637 346C775 290 914 287 942 347C989 448 722 618 508 714C287 812 63 855 21 778C-25 694 128 543 327 444C177 551 79 660 124 716C178 784 406 718 588 622C752 536 888 420 844 356C815 316 720 324 637 346Z"/>
+  <path fill="none" stroke="#57eaff" stroke-opacity=".8" stroke-width="5" stroke-linecap="round" d="M27 782C81 855 288 812 508 714C722 618 989 448 942 347"/>
+  <path class="trail" fill="none" stroke="#b5ffff" stroke-width="10" stroke-linecap="round"
+        filter="url(#glow)" pathLength="100"
+        d="M27 782C81 855 288 812 508 714C722 618 989 448 942 347"/>
+</svg>

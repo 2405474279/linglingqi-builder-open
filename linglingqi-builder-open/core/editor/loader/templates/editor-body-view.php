@@ -12,14 +12,7 @@ $notice = Plugin::$instance->editor->notice_bar->get_notice();
 
 <div id="elementor-loading">
 	<div class="elementor-loader-wrapper">
-		<div class="elementor-loader" aria-hidden="true">
-			<div class="elementor-loader-boxes">
-				<div class="elementor-loader-box"></div>
-				<div class="elementor-loader-box"></div>
-				<div class="elementor-loader-box"></div>
-				<div class="elementor-loader-box"></div>
-			</div>
-		</div>
+		<div class="elementor-loader" aria-hidden="true"></div>
 		<div class="elementor-loading-title"><?php echo esc_html__( 'Loading', 'elementor' ); ?></div>
 	</div>
 </div>
