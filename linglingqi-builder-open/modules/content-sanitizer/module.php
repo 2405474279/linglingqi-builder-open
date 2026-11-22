@@ -24,30 +24,22 @@ class Module extends BaseModule {
 	}
 
 	public function sanitize_content( $data, $document ): array {
-		if ( current_user_can( 'manage_options' ) || empty( $data['elements'] ) ) {
+		if ( current_user_can( 'manage_options' ) || empty( $data['elements'] ) || ! is_array( $data['elements'] ) ) {
 			return $data;
 		}
 
-		if ( ! $this->is_widget_present( $data ) ) {
-			return $data;
-		}
-
-		return Plugin::$instance->db->iterate_data( $data, function ( $element ) {
-			if ( $this->is_target_widget( $element ) ) {
-				$element['settings']['title'] = Plugin::$instance->widgets_manager->get_widget_types( self::WIDGET_TO_SANITIZE )->sanitize( $element['settings']['title'] );
+		$data['elements'] = Plugin::$instance->db->iterate_data( $data['elements'], function ( $element ) {
+			$title = $element['settings']['title'] ?? null;
+			if ( ( $element['widgetType'] ?? null ) === self::WIDGET_TO_SANITIZE && is_string( $title ) ) {
+				$heading = Plugin::$instance->widgets_manager->get_widget_types( self::WIDGET_TO_SANITIZE );
+				if ( is_callable( [ $heading, 'sanitize' ] ) ) {
+					$element['settings']['title'] = $heading->sanitize( $title );
+				}
 			}
 
 			return $element;
-		});
-	}
+		} );
 
-	private function is_target_widget( $element ) {
-		return self::WIDGET_TO_SANITIZE === $element['widgetType'];
-	}
-
-	private function is_widget_present( array $elements ): bool {
-		$json = wp_json_encode( $elements );
-
-		return false !== strpos( $json, '"widgetType":"' . self::WIDGET_TO_SANITIZE . '"' );
+		return $data;
 	}
 }

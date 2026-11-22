@@ -2,7 +2,7 @@
 Tags: builder, drag-and-drop, editor, layout
 Requires at least: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.0-rc.1
+Stable tag: 1.2.0-rc.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,6 +19,11 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 3. 添加组件并预览，保存草稿或发布。
 
 == Changelog ==
+
+= 1.2.0-rc.2 =
+* 将新建页的 V4／经典偏好与现有原子内容的运行时分开。
+* 保留旧选项、页面、修订、样式和区块。管理员从「编辑器模式」确认新建页偏好。
+* 修复原子内容在页面根层粘贴时 ID 重复，以及普通编辑者保存混合页面时的 PHP 警告。
 
 = 1.2.0-rc.1 =
 * 默认启用 V4，保留旧站主动关闭的设置，并提供管理员切换入口。

@@ -6,6 +6,7 @@ use Elementor\Core\Common\Modules\Ajax\Module as Ajax;
 use Elementor\Core\Common\Modules\Finder\Module as Finder;
 use Elementor\Core\Files\Uploads_Manager;
 use Elementor\Icons_Manager;
+use Elementor\Modules\AtomicWidgets\OptIn\Opt_In;
 use Elementor\Plugin;
 use Elementor\Utils;
 
@@ -262,6 +263,7 @@ class App extends BaseApp {
 			'isElementorDebug' => Utils::is_elementor_debug(),
 			'activeModules' => array_keys( $this->get_components() ),
 			'experimentalFeatures' => $active_experimental_features,
+			'linglingqiPreferV4' => Opt_In::prefers_v4(),
 			'allExperimentalFeatures' => $all_experimental_features,
 			'urls' => [
 				'assets' => ELEMENTOR_ASSETS_URL,

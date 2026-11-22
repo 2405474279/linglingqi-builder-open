@@ -2,6 +2,8 @@
 namespace Elementor;
 
 use Elementor\Includes\Elements\Container;
+use Elementor\Modules\AtomicWidgets\Module as Atomic_Widgets;
+use Elementor\Modules\AtomicWidgets\OptIn\Opt_In;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -333,7 +335,10 @@ class Elements_Manager {
 			],
 		];
 
-		if ( Plugin::$instance->experiments->is_feature_active( 'e_atomic_elements' ) ) {
+		$has_atomic_elements = Atomic_Widgets::is_active();
+		$prefer_v4 = $has_atomic_elements && Opt_In::prefers_v4();
+
+		if ( $has_atomic_elements ) {
 			$atomic_form_category = [
 				'title' => esc_html__( 'Atomic Form', 'elementor' ),
 			];
@@ -345,6 +350,11 @@ class Elements_Manager {
 				[ self::CATEGORY_ATOMIC_FORM => $atomic_form_category ],
 				array_diff_key( $this->categories, [ self::CATEGORY_ATOMIC_ELEMENTS => true ] )
 			);
+		}
+
+		if ( ! $prefer_v4 ) {
+			$classic = array_intersect_key( $this->categories, array_flip( [ 'layout', self::CATEGORY_BASIC, 'general' ] ) );
+			$this->categories = $classic + $this->categories;
 		}
 
 		// Not using the `add_category` because it doesn't allow 3rd party to inject a category on top the others.
@@ -372,14 +382,14 @@ class Elements_Manager {
 		 */
 		do_action( 'elementor/elements/categories_registered', $this );
 
-		$after_candidates = Plugin::$instance->experiments->is_feature_active( 'e_atomic_elements' )
+		$after_candidates = $prefer_v4
 			? [ self::CATEGORY_ATOMIC_FORM, self::CATEGORY_ATOMIC_ELEMENTS ]
 			: [ self::CATEGORY_BASIC ];
 
 		$this->promote_category_after( self::CATEGORY_ANGIE_WIDGETS, $after_candidates );
 		$this->promote_category_after( self::CATEGORY_CUSTOM_WIDGETS, $after_candidates );
 
-		if ( ! Utils::has_pro() && Plugin::$instance->experiments->is_feature_active( 'e_atomic_elements' ) ) {
+		if ( ! Utils::has_pro() && $prefer_v4 ) {
 			$this->promote_category_after( self::CATEGORY_PRO_ELEMENTS, [
 				self::CATEGORY_CUSTOM_WIDGETS,
 				self::CATEGORY_ANGIE_WIDGETS,

@@ -7201,12 +7201,22 @@ var import_jsx_runtime = require_jsx_runtime();
 
 //#endregion
 //#region packages/packages/core/editor-canvas/src/legacy/create-pending-element.ts
+	function clonePendingElementTree(item) {
+		const source = typeof item.toJSON === "function" ? item.toJSON() : item;
+		return {
+			...source,
+			id: (0, _elementor_editor_elements.generateElementId)(),
+			settings: { ...source.settings, _element_id: "" },
+			elements: (source.elements ?? []).map(clonePendingElementTree)
+		};
+	}
 	function createPendingElement(wrapperView, data, options = {}) {
 		const parentContainer = wrapperView.getContainer();
-		const model = { ...data };
+		// Clone before registration so pending children can be looked up by their new IDs.
+		const model = options.clone ? clonePendingElementTree(data) : { ...data };
 		if (!model.id) model.id = (0, _elementor_editor_elements.generateElementId)();
 		if (!model.elements) model.elements = [];
-		if (!(0, _elementor_editor_elements.addModelToParent)(parentContainer.id, model, options)) return;
+		if (!(0, _elementor_editor_elements.addModelToParent)(parentContainer.id, model, { ...options, clone: false })) return;
 		const childId = model.id;
 		const childModel = (0, _elementor_editor_elements.findModelInDocument)(childId);
 		if (!childModel) return;

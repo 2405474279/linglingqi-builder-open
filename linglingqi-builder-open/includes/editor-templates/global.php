@@ -1,6 +1,8 @@
 <?php
 namespace Elementor;
 
+use Elementor\Modules\AtomicWidgets\OptIn\Opt_In;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -23,7 +25,8 @@ function echo_select_your_structure_title() {
 		</button>
 		<?php
 		$experiments_manager = Plugin::$instance->experiments;
-		if ( $experiments_manager->is_feature_active( 'container' ) ) { ?>
+		$has_layout_presets = $experiments_manager->is_feature_active( 'container' ) || Opt_In::prefers_v4();
+		if ( $has_layout_presets ) { ?>
 			<button type="button" class="elementor-add-section-back" data-tooltip="<?php echo esc_attr__( 'Back', 'elementor' ); ?>" aria-label="<?php echo esc_attr__( 'Back', 'elementor' ); ?>">
 				<i class="eicon-chevron-left" aria-hidden="true"></i>
 			</button>
@@ -33,7 +36,7 @@ function echo_select_your_structure_title() {
 				$add_container_title = esc_html__( 'Add New Container', 'elementor' );
 				$add_section_title = esc_html__( 'Add New Section', 'elementor' );
 
-				$button_title = ( $experiments_manager->is_feature_active( 'container' ) ) ? $add_container_title : $add_section_title;
+				$button_title = $has_layout_presets ? $add_container_title : $add_section_title;
 			?>
 			<button type="button" class="elementor-add-section-area-button elementor-add-section-button" data-tooltip="<?php echo esc_attr( $button_title ); ?>" aria-label="<?php echo esc_attr( $button_title ); ?>">
 				<i class="eicon-plus" aria-hidden="true"></i>

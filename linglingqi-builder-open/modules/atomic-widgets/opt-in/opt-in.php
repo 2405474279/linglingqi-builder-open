@@ -19,17 +19,9 @@ class Opt_In {
 
 	const SETTINGS_PAGE = 'linglingqi-editor-mode';
 
-	const OPT_IN_FEATURES = [
-		self::EXPERIMENT_NAME,
-		'container',
-		AtomicWidgetsModule::EXPERIMENT_NAME,
-	];
-
-	const OPT_OUT_FEATURES = [
-		self::EXPERIMENT_NAME,
-		AtomicWidgetsModule::EXPERIMENT_NAME,
-	];
-
+	const PREFERENCE_OPTION = 'linglingqi_new_page_mode';
+	const PREFER_CLASSIC = 'classic';
+	const PREFER_V4 = 'v4';
 
 	public function init() {
 		$this->register_feature();
@@ -40,26 +32,36 @@ class Opt_In {
 		add_action( 'admin_post_linglingqi_editor_mode', [ $this, 'save_settings' ] );
 	}
 
-	private function register_feature() {
-		$experiments = Plugin::$instance->experiments;
-		$enabled = $experiments->is_feature_active( 'container' );
+	public static function prefers_v4(): bool {
+		$preference = get_option( self::PREFERENCE_OPTION );
+		if ( in_array( $preference, [ self::PREFER_V4, self::PREFER_CLASSIC ], true ) ) {
+			return self::PREFER_V4 === $preference;
+		}
 
-		// An older explicit switch-off can be stored under either option.
-		foreach ( self::OPT_OUT_FEATURES as $feature ) {
+		$experiments = Plugin::$instance->experiments;
+		if ( ! $experiments->is_feature_active( 'container' ) ) {
+			return false;
+		}
+
+		// Historical state affects authoring preference and never disables stored content.
+		foreach ( [ self::EXPERIMENT_NAME, AtomicWidgetsModule::EXPERIMENT_NAME ] as $feature ) {
 			$value = get_option( $experiments->get_feature_option_key( $feature ) );
 			if ( ! in_array( $value, [ false, '', Experiments_Manager::STATE_DEFAULT, Experiments_Manager::STATE_ACTIVE ], true ) ) {
-				$enabled = false;
-				break;
+				return false;
 			}
 		}
 
-		$experiments->add_feature( [
+		return true;
+	}
+
+	private function register_feature() {
+		// Keep the upstream V4 capability flag for style parsing and integrations.
+		Plugin::$instance->experiments->add_feature( [
 			'name' => self::EXPERIMENT_NAME,
 			'title' => esc_html__( 'Editor V4', 'elementor' ),
-			'description' => esc_html__( 'Enable Editor V4.', 'elementor' ),
 			'hidden' => true,
 			'mutable' => false,
-			'default' => $enabled ? Experiments_Manager::STATE_ACTIVE : Experiments_Manager::STATE_INACTIVE,
+			'default' => Experiments_Manager::STATE_ACTIVE,
 			'release_status' => Experiments_Manager::RELEASE_STATUS_BETA,
 		] );
 	}
@@ -80,18 +82,20 @@ class Opt_In {
 			wp_die( esc_html__( 'Permission denied', 'elementor' ) );
 		}
 
-		$enabled = Plugin::$instance->experiments->is_feature_active( self::EXPERIMENT_NAME );
+		$prefer_v4 = self::prefers_v4();
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( '凌凌漆编辑器模式', 'elementor' ); ?></h1>
-			<p><?php echo $enabled ? esc_html__( '当前模式：V4（原子元素）', 'elementor' ) : esc_html__( '当前模式：经典编辑器', 'elementor' ); ?></p>
-			<p><?php esc_html_e( '关闭 V4 后，已发布页面的原子元素可能暂时无法显示或编辑。切换期间请勿保存含原子元素的页面。重新启用 V4 即可恢复原子元素及其样式。', 'elementor' ); ?></p>
-			<p><?php esc_html_e( '启用 V4 同时启用容器布局。切换模式会保留现有页面数据和区块原稿。', 'elementor' ); ?></p>
+			<p><?php esc_html_e( '此设置决定空白画布默认插入的布局和组件面板的优先顺序。经典、V4 和混合页面都可以继续显示、编辑和保存。', 'elementor' ); ?></p>
 			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
 				<?php wp_nonce_field( 'linglingqi_editor_mode' ); ?>
 				<input type="hidden" name="action" value="linglingqi_editor_mode">
-				<input type="hidden" name="editor_mode" value="<?php echo $enabled ? 'classic' : 'v4'; ?>">
-				<?php submit_button( $enabled ? __( '确认切换到经典编辑器', 'elementor' ) : __( '启用 V4 并恢复原子元素', 'elementor' ) ); ?>
+				<fieldset>
+					<legend><?php esc_html_e( '新建页编辑偏好', 'elementor' ); ?></legend>
+					<p><label><input type="radio" name="editor_mode" value="v4" <?php checked( $prefer_v4 ); ?>> <?php esc_html_e( '新建页优先使用 V4', 'elementor' ); ?></label></p>
+					<p><label><input type="radio" name="editor_mode" value="classic" <?php checked( ! $prefer_v4 ); ?>> <?php esc_html_e( '新建页优先使用经典', 'elementor' ); ?></label></p>
+				</fieldset>
+				<?php submit_button( __( '确认保存编辑偏好', 'elementor' ) ); ?>
 			</form>
 		</div>
 		<?php
@@ -107,48 +111,33 @@ class Opt_In {
 			? sanitize_key( wp_unslash( $_POST['editor_mode'] ) )
 			: '';
 
-		if ( 'v4' === $mode ) {
-			$this->opt_in_v4();
-		} elseif ( 'classic' === $mode ) {
-			$this->opt_out_v4();
-		} else {
+		if ( ! in_array( $mode, [ self::PREFER_V4, self::PREFER_CLASSIC ], true ) ) {
 			wp_die( esc_html__( '无效的编辑器模式。', 'elementor' ) );
 		}
 
+		update_option( self::PREFERENCE_OPTION, $mode );
 		wp_safe_redirect( admin_url( 'admin.php?page=' . self::SETTINGS_PAGE ) );
 		exit;
 	}
 
-	private function opt_out_v4() {
-		foreach ( self::OPT_OUT_FEATURES as $feature ) {
-			$feature_key = Plugin::$instance->experiments->get_feature_option_key( $feature );
-			update_option( $feature_key, Experiments_Manager::STATE_INACTIVE );
-		}
-	}
-
-	private function opt_in_v4() {
-		foreach ( self::OPT_IN_FEATURES as $feature ) {
-			$feature_key = Plugin::$instance->experiments->get_feature_option_key( $feature );
-			update_option( $feature_key, Experiments_Manager::STATE_ACTIVE );
-		}
-
-		update_option( self::OPT_IN_CLICKED_OPTION, true );
+	private function get_legacy_notice(): string {
+		return __( '请到「网站可视化构建器 → 编辑器模式」确认新建页编辑偏好。', 'elementor' );
 	}
 
 	public function ajax_opt_out_v4() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			throw new \Exception( 'Permission denied' );
-		}
-
-		$this->opt_out_v4();
+		$this->reject_legacy_mode_change();
 	}
 
 	public function ajax_opt_in_v4() {
+		$this->reject_legacy_mode_change();
+	}
+
+	private function reject_legacy_mode_change() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			throw new \Exception( 'Permission denied' );
+			throw new \Exception( esc_html__( 'Permission denied', 'elementor' ), 403 );
 		}
 
-		$this->opt_in_v4();
+		throw new \Exception( $this->get_legacy_notice(), 409 );
 	}
 
 	private function add_ajax_actions( Ajax $ajax ) {
@@ -157,10 +146,10 @@ class Opt_In {
 	}
 
 	private function handle_rest_opt_in_v4() {
-		$this->ajax_opt_in_v4();
-		return new \WP_REST_Response( [
-			'success' => true,
-		], 200 );
+		return new \WP_Error( 'linglingqi_editor_mode_confirmation_required', $this->get_legacy_notice(), [
+			'status' => 409,
+			'settings_url' => admin_url( 'admin.php?page=' . self::SETTINGS_PAGE ),
+		] );
 	}
 
 	private function register_routes() {

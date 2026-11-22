@@ -2,7 +2,7 @@
 /**
  * Plugin Name: 凌凌漆可视化编辑器（开源版）
  * Description: WordPress 可视化编辑器，支持响应式布局及 Elementor 基础和常规组件。
- * Version: 1.2.0-rc.1
+ * Version: 1.2.0-rc.2
  * Author: 凌凌漆
  * Requires PHP: 7.4
  * Requires at least: 6.8
@@ -51,7 +51,7 @@ if ( defined( 'ELEMENTOR_VERSION' ) ) {
 	return;
 }
 
-define( 'ELEMENTOR_VERSION', '1.2.0-rc.1' );
+define( 'ELEMENTOR_VERSION', '1.2.0-rc.2' );
 
 /**
  * Compatibility baseline of the upstream codebase this build is derived from.

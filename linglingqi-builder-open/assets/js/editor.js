@@ -7062,10 +7062,9 @@ init_element_base();
 			}
 			return _createClass(ContainerHelper, null, [
 				{
-					key: "isV4OptIn",
-					value: function isV4OptIn() {
-						var _elementorCommon;
-						return !!((_elementorCommon = elementorCommon) !== null && _elementorCommon !== void 0 && (_elementorCommon = _elementorCommon.config) !== null && _elementorCommon !== void 0 && (_elementorCommon = _elementorCommon.experimentalFeatures) !== null && _elementorCommon !== void 0 && _elementorCommon.e_opt_in_v4);
+					key: "prefersV4Layout",
+					value: function prefersV4Layout() {
+						return !!elementorCommon.config.linglingqiPreferV4;
 					}
 				},
 				{
@@ -7153,7 +7152,7 @@ init_element_base();
 						var target = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : elementor.getPreviewContainer();
 						var options = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
 						var modelAttributes = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : {};
-						if (ContainerHelper.isV4OptIn()) return createV4GridFromPreset(structure, target, options);
+						if (ContainerHelper.prefersV4Layout()) return createV4GridFromPreset(structure, target, options);
 						var parsedStructure = elementor.presetsFactory.getParsedGridStructure(structure);
 						return ContainerHelper.createContainer({
 							container_type: ContainerHelper.CONTAINER_TYPE_GRID,
@@ -7183,7 +7182,7 @@ init_element_base();
 					value: function createContainerFromPreset(preset) {
 						var target = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : elementor.getPreviewContainer();
 						var options = arguments.length > 2 ? arguments[2] : void 0;
-						if (ContainerHelper.isV4OptIn()) return createV4FlexboxFromPreset(preset, target, options);
+						if (ContainerHelper.prefersV4Layout()) return createV4FlexboxFromPreset(preset, target, options);
 						var historyId = $e.internal("document/history/start-log", {
 							type: "add",
 							title: (0, _wordpress_i18n.__)("Container", "elementor")
@@ -8437,7 +8436,7 @@ init_element_base();
 				}
 			}]);
 		}(Marionette.ItemView);
-		_defineProperty(AddSectionBase, "IS_CONTAINER_ACTIVE", !!elementorCommon.config.experimentalFeatures.container);
+		_defineProperty(AddSectionBase, "IS_CONTAINER_ACTIVE", ContainerHelper.prefersV4Layout() || !!elementorCommon.config.experimentalFeatures.container);
 		_defineProperty(AddSectionBase, "VIEW_CHOOSE_ACTION", "choose-action");
 		_defineProperty(AddSectionBase, "VIEW_CONTAINER_FLEX_PRESET", "select-container-preset");
 		_defineProperty(AddSectionBase, "VIEW_CONTAINER_GRID_PRESET", "select-container-preset-grid");
@@ -30576,6 +30575,11 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 				if (!this.config.allowEdit || elementor.helpers.maybeDisableWidget()) return;
 				var isContainerActive = !!elementorCommon.config.experimentalFeatures.container;
 				var selectedElement = elementor.channels.panelElements.request("element:selected");
+				if (!selectedElement) return;
+				if (selectedElement.model.get("atomic")) {
+					elementor.channels.panelElements.reply("element:selected", null);
+					return this.createElementFromModel(selectedElement.model.toJSON(), Object.assign({ at: this.getOption("at") }, options));
+				}
 				var historyId = $e.internal("document/history/start-log", {
 					type: "add",
 					title: elementor.helpers.getModelLabel(selectedElement.model)
@@ -45061,13 +45065,14 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				this._syncAtomicComparator();
 			},
 			_syncAtomicComparator: function _syncAtomicComparator() {
-				var _elementorCommon$conf;
-				if (elementor.channels.panelElements.request("filter:value") && (_elementorCommon$conf = elementorCommon.config.experimentalFeatures) !== null && _elementorCommon$conf !== void 0 && _elementorCommon$conf.e_atomic_elements) this.viewComparator = function(a, b) {
-					if (a.get("atomic") && !b.get("atomic")) return -1;
-					if (!a.get("atomic") && b.get("atomic")) return 1;
-					return 0;
+				if (!elementor.channels.panelElements.request("filter:value")) {
+					this.viewComparator = null;
+					return;
+				}
+				var direction = elementorCommon.config.linglingqiPreferV4 ? 1 : -1;
+				this.viewComparator = function(a, b) {
+					return direction * (Number(Boolean(b.get("atomic"))) - Number(Boolean(a.get("atomic"))));
 				};
-				else this.viewComparator = null;
 			},
 			filter: function filter(childModel) {
 				var filterValue = elementor.channels.panelElements.request("filter:value");
