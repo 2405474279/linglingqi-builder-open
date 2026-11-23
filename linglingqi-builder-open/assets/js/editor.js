@@ -5307,7 +5307,10 @@ init_component_base$1();
 			this.onDocumentChanged = this.onDocumentChanged.bind(this);
 			this.onDocumentLoaded = this.onDocumentLoaded.bind(this);
 			this.bindEvents();
-			wp.heartbeat.connectNow();
+			// WordPress 6.8 initializes its Heartbeat authentication dialog on DOM ready.
+			jQuery(() => {
+				if (elementor.heartbeat === this) wp.heartbeat.connectNow();
+			});
 		}
 		return _createClass(Heartbeat, [
 			{

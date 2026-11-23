@@ -105,6 +105,12 @@ class Atomic_Tabs_Menu extends Atomic_Element_Base {
 		];
 	}
 
+	protected function build_template_context(): array {
+		return array_merge( $this->build_base_template_context(), [
+			'tablist_label' => __( '选项卡', 'elementor' ),
+		] );
+	}
+
 	protected function define_allowed_child_types() {
 		return [ 'e-tab', 'container' ];
 	}

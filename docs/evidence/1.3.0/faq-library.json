@@ -1,0 +1,92 @@
+{
+  "mode": "faq-library",
+  "version": "1.3.0",
+  "environment": [
+    "7.1.5",
+    "8.4.27",
+    "8.4.6",
+    "Twenty Twenty-Five"
+  ],
+  "sha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+  "cases": {
+    "sourceDesignReopened": {
+      "status": "passed",
+      "sharedClass": "g-fa490fb",
+      "localId": "e-d93106c-dd4c25a",
+      "resumed": false
+    },
+    "nativeCopyAndDelete": {
+      "status": "passed",
+      "copyIds": [
+        "130cfbc56e3fdaf7",
+        "fc6fb5f265dc61b4"
+      ],
+      "localIds": [
+        "e-130cfbc56e3fdaf7-787a66e",
+        "e-fc6fb5f265dc61b4-2adc462"
+      ],
+      "sharedClass": "g-fa490fb",
+      "sharedVariable": "e-gv-a855208"
+    },
+    "savedStyleAndIndependentGroups": {
+      "status": "passed",
+      "desktop": [
+        "22px",
+        "22px"
+      ],
+      "mobile": [
+        "30px",
+        "38px"
+      ],
+      "singleOpenWithinEachGroup": true,
+      "groupsIndependent": true,
+      "sourceAvailable": true,
+      "onlySecondContentEdited": true
+    }
+  },
+  "opens": [
+    {
+      "label": "source-faq-for-library",
+      "id": 214,
+      "ms": 31511,
+      "assets": [
+        {
+          "name": "editor-elements.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "editor-editing-panel.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "accordion-preview-handler.min.js",
+          "ver": "1.3.0"
+        }
+      ]
+    },
+    {
+      "label": "destination-faq-library",
+      "id": 215,
+      "ms": 21923,
+      "assets": [
+        {
+          "name": "editor-elements.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "editor-editing-panel.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "accordion-preview-handler.min.js",
+          "ver": "1.3.0"
+        }
+      ]
+    }
+  ],
+  "jsErrors": [],
+  "http5xx": [],
+  "environmentWarnings": [],
+  "phpApplicationWarnings": [],
+  "status": "passed"
+}

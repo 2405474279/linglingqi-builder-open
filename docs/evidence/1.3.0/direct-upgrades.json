@@ -1,0 +1,370 @@
+{
+  "status": "passed",
+  "releaseZipSha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+  "upgrade120": {
+    "source": "1.2.0",
+    "target": "1.3.0",
+    "targetSha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+    "upload": {
+      "type": "admin-upload",
+      "package": "linglingqi-builder-open-v1.3.0.zip",
+      "replace": true,
+      "activate": false,
+      "uploadMilliseconds": 87746,
+      "result": "replaced"
+    },
+    "packageAudit": {
+      "site": "modern-120-fromrc2",
+      "zipSha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+      "bytes": 14250531,
+      "wpRootLength": 97,
+      "archiveFiles": 2334,
+      "matching": 2334,
+      "mismatches": []
+    },
+    "runtime": {
+      "type": "runtime",
+      "version": "1.3.0",
+      "compat": "4.3.6",
+      "wp": "7.1.5",
+      "php": "8.4.27",
+      "mysql": "8.4.6",
+      "active": [
+        "linglingqi-builder-open/linglingqi-builder.php"
+      ],
+      "theme": "twentytwentyfive",
+      "options": {
+        "e_opt_in_v4": "legacy-unrecognized",
+        "e_atomic_elements": "default",
+        "container": "(absent)",
+        "preference": "classic"
+      },
+      "prefersV4": false,
+      "runtime": {
+        "e_opt_in_v4": true,
+        "e_atomic_elements": true,
+        "container": true
+      }
+    },
+    "diagnostics": [
+      "Transition was aborted because of invalid state. Page already revealed",
+      "Transition was aborted because of invalid state. Page already revealed"
+    ],
+    "unchangedTreesAndRevisions": [
+      {
+        "type": "baseline-preserved",
+        "kind": "faq",
+        "id": 15,
+        "sha256": "929a8c31f08e9c46175edf9dfd3f2c9dd90fdba699b388cdf3d8c1b59f786b99",
+        "revisions": {
+          "16": "929a8c31f08e9c46175edf9dfd3f2c9dd90fdba699b388cdf3d8c1b59f786b99"
+        },
+        "http": 200,
+        "markerCount": 1
+      },
+      {
+        "type": "baseline-preserved",
+        "kind": "classic",
+        "id": 17,
+        "sha256": "2f4a10541ca3a0a485c0bf47d4a042381c537afa2ce5db977f731b266b43c176",
+        "revisions": {
+          "18": "2f4a10541ca3a0a485c0bf47d4a042381c537afa2ce5db977f731b266b43c176"
+        },
+        "http": 200,
+        "markerCount": 6
+      },
+      {
+        "type": "baseline-preserved",
+        "kind": "nested",
+        "id": 19,
+        "sha256": "d96ff1f15e3e07921fbc0a704b637903f55dc3b10414c504bd66aa053ac28a0e",
+        "revisions": {
+          "20": "d96ff1f15e3e07921fbc0a704b637903f55dc3b10414c504bd66aa053ac28a0e"
+        },
+        "http": 200,
+        "markerCount": 6
+      },
+      {
+        "type": "baseline-preserved",
+        "kind": "atomic",
+        "id": 21,
+        "sha256": "fc3af991f5bab453e34445c355c369f908e40c5f6c288250d499c6a7ef6c5ac8",
+        "revisions": {
+          "22": "fc3af991f5bab453e34445c355c369f908e40c5f6c288250d499c6a7ef6c5ac8"
+        },
+        "http": 200,
+        "markerCount": 6
+      }
+    ],
+    "nativeEditorSaves": [
+      {
+        "type": "ordinary-editor-save",
+        "kind": "classic",
+        "id": 17,
+        "method": "native repeater settings command",
+        "saved": 200,
+        "http": 200,
+        "newRootTypes": [
+          "container"
+        ],
+        "oldRevisionHashesPreserved": true,
+        "newTreeSha256": "3094caf670e74539d2881eb731aee9cf8c5b496dda39f363d179a7bf0286af6b"
+      },
+      {
+        "type": "ordinary-editor-save",
+        "kind": "nested",
+        "id": 19,
+        "method": "native repeater settings command",
+        "saved": 200,
+        "http": 200,
+        "newRootTypes": [
+          "container"
+        ],
+        "oldRevisionHashesPreserved": true,
+        "newTreeSha256": "c5c2e346dfb36868a8d4790ca8d6c8902484e64ced79d97b03d94e2352a0f0d2"
+      },
+      {
+        "type": "ordinary-editor-save",
+        "kind": "faq",
+        "id": 15,
+        "method": {
+          "via": "canvas contenteditable",
+          "fallbackReason": null
+        },
+        "saved": 200,
+        "http": 200,
+        "newRootTypes": [
+          "e-accordion"
+        ],
+        "oldRevisionHashesPreserved": true,
+        "newTreeSha256": "c241845ccf79350a730302cc260b8b062c0620215c01149f28222d56affeee69"
+      },
+      {
+        "type": "ordinary-editor-save",
+        "kind": "atomic",
+        "id": 21,
+        "method": {
+          "via": "canvas contenteditable",
+          "fallbackReason": null
+        },
+        "saved": 200,
+        "http": 200,
+        "newRootTypes": [
+          "e-tabs"
+        ],
+        "oldRevisionHashesPreserved": true,
+        "newTreeSha256": "6cbc5b97d28226d8c010f721b301cb21cbaa7659243843df2d8cd77742842dfa"
+      }
+    ],
+    "ordinaryFreshReopen": [
+      {
+        "type": "ordinary-reopen",
+        "kind": "classic",
+        "id": 17,
+        "passed": true
+      },
+      {
+        "type": "ordinary-reopen",
+        "kind": "nested",
+        "id": 19,
+        "passed": true
+      },
+      {
+        "type": "ordinary-reopen",
+        "kind": "faq",
+        "id": 15,
+        "passed": true
+      },
+      {
+        "type": "ordinary-reopen",
+        "kind": "atomic",
+        "id": 21,
+        "passed": true
+      }
+    ],
+    "browserApplicationErrors": []
+  },
+  "upgradeRc1": {
+    "source": "1.3.0-rc.1",
+    "target": "1.3.0",
+    "targetSha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+    "upload": {
+      "type": "admin-upload",
+      "package": "linglingqi-builder-open-v1.3.0.zip",
+      "replace": true,
+      "activate": false,
+      "uploadMilliseconds": 132629,
+      "result": "replaced"
+    },
+    "packageAudit": {
+      "site": "modern-120-fromrc1",
+      "zipSha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+      "bytes": 14250531,
+      "wpRootLength": 97,
+      "archiveFiles": 2334,
+      "matching": 2334,
+      "mismatches": []
+    },
+    "runtime": {
+      "type": "runtime",
+      "version": "1.3.0",
+      "compat": "4.3.6",
+      "wp": "7.1.5",
+      "php": "8.4.27",
+      "mysql": "8.4.6",
+      "active": [
+        "linglingqi-builder-open/linglingqi-builder.php"
+      ],
+      "theme": "twentytwentyfive",
+      "options": {
+        "e_opt_in_v4": "inactive",
+        "e_atomic_elements": "active",
+        "container": "default",
+        "preference": "(absent)"
+      },
+      "prefersV4": false,
+      "runtime": {
+        "e_opt_in_v4": true,
+        "e_atomic_elements": true,
+        "container": true
+      }
+    },
+    "diagnostics": [
+      "Transition was aborted because of invalid state. Page already revealed",
+      "Transition was aborted because of invalid state. Page already revealed"
+    ],
+    "unchangedTreesAndRevisions": [
+      {
+        "type": "baseline-preserved",
+        "kind": "faq",
+        "id": 16,
+        "sha256": "929a8c31f08e9c46175edf9dfd3f2c9dd90fdba699b388cdf3d8c1b59f786b99",
+        "revisions": {
+          "17": "929a8c31f08e9c46175edf9dfd3f2c9dd90fdba699b388cdf3d8c1b59f786b99"
+        },
+        "http": 200,
+        "markerCount": 1
+      },
+      {
+        "type": "baseline-preserved",
+        "kind": "classic",
+        "id": 18,
+        "sha256": "2f4a10541ca3a0a485c0bf47d4a042381c537afa2ce5db977f731b266b43c176",
+        "revisions": {
+          "19": "2f4a10541ca3a0a485c0bf47d4a042381c537afa2ce5db977f731b266b43c176"
+        },
+        "http": 200,
+        "markerCount": 6
+      },
+      {
+        "type": "baseline-preserved",
+        "kind": "nested",
+        "id": 20,
+        "sha256": "d96ff1f15e3e07921fbc0a704b637903f55dc3b10414c504bd66aa053ac28a0e",
+        "revisions": {
+          "21": "d96ff1f15e3e07921fbc0a704b637903f55dc3b10414c504bd66aa053ac28a0e"
+        },
+        "http": 200,
+        "markerCount": 6
+      },
+      {
+        "type": "baseline-preserved",
+        "kind": "atomic",
+        "id": 22,
+        "sha256": "fc3af991f5bab453e34445c355c369f908e40c5f6c288250d499c6a7ef6c5ac8",
+        "revisions": {
+          "23": "fc3af991f5bab453e34445c355c369f908e40c5f6c288250d499c6a7ef6c5ac8"
+        },
+        "http": 200,
+        "markerCount": 6
+      }
+    ],
+    "nativeEditorSaves": [
+      {
+        "type": "ordinary-editor-save",
+        "kind": "classic",
+        "id": 18,
+        "method": "native repeater settings command",
+        "saved": 200,
+        "http": 200,
+        "newRootTypes": [
+          "container"
+        ],
+        "oldRevisionHashesPreserved": true,
+        "newTreeSha256": "3094caf670e74539d2881eb731aee9cf8c5b496dda39f363d179a7bf0286af6b"
+      },
+      {
+        "type": "ordinary-editor-save",
+        "kind": "nested",
+        "id": 20,
+        "method": "native repeater settings command",
+        "saved": 200,
+        "http": 200,
+        "newRootTypes": [
+          "container"
+        ],
+        "oldRevisionHashesPreserved": true,
+        "newTreeSha256": "c5c2e346dfb36868a8d4790ca8d6c8902484e64ced79d97b03d94e2352a0f0d2"
+      },
+      {
+        "type": "ordinary-editor-save",
+        "kind": "faq",
+        "id": 16,
+        "method": {
+          "via": "canvas contenteditable",
+          "fallbackReason": null
+        },
+        "saved": 200,
+        "http": 200,
+        "newRootTypes": [
+          "e-accordion"
+        ],
+        "oldRevisionHashesPreserved": true,
+        "newTreeSha256": "c241845ccf79350a730302cc260b8b062c0620215c01149f28222d56affeee69"
+      },
+      {
+        "type": "ordinary-editor-save",
+        "kind": "atomic",
+        "id": 22,
+        "method": {
+          "via": "canvas contenteditable",
+          "fallbackReason": null
+        },
+        "saved": 200,
+        "http": 200,
+        "newRootTypes": [
+          "e-tabs"
+        ],
+        "oldRevisionHashesPreserved": true,
+        "newTreeSha256": "6cbc5b97d28226d8c010f721b301cb21cbaa7659243843df2d8cd77742842dfa"
+      }
+    ],
+    "ordinaryFreshReopen": [
+      {
+        "type": "ordinary-reopen",
+        "kind": "classic",
+        "id": 18,
+        "passed": true
+      },
+      {
+        "type": "ordinary-reopen",
+        "kind": "nested",
+        "id": 20,
+        "passed": true
+      },
+      {
+        "type": "ordinary-reopen",
+        "kind": "faq",
+        "id": 16,
+        "passed": true
+      },
+      {
+        "type": "ordinary-reopen",
+        "kind": "atomic",
+        "id": 22,
+        "passed": true
+      }
+    ],
+    "browserApplicationErrors": []
+  }
+}

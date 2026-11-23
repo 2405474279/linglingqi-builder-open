@@ -661,14 +661,23 @@ class Module extends BaseModule {
 			'.e-background-video:not(.e-background-video--playing):not(.e-background-video--paused) .e-background-video__controls,',
 			'.e-background-video:not(.e-background-video--playing):not(.e-background-video--paused) .e-background-video__play,',
 			'.e-background-video:not(.e-background-video--playing):not(.e-background-video--paused) .e-background-video__pause { display: none; }',
+			'.e-tabs-menu-base { flex-wrap: wrap; gap: .25rem; }',
+			'.e-tabs-menu-base > button[data-e-type="e-tab"] { min-block-size: 44px; min-inline-size: 0; max-inline-size: 100%; white-space: normal; overflow-wrap: anywhere; }',
+			'.elementor .e-tabs-menu-base > button[data-e-type="e-tab"]:focus-visible, .elementor .e-tab-content-base:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }',
+			'.e-tabs-content-area-base, .e-tab-content-base { min-inline-size: 0; max-inline-size: 100%; overflow-wrap: anywhere; }',
+			'.e-tab-content-base[hidden] { display: none !important; }',
 			// Accordion: `<summary>` already loses its native marker via `display: flex` on the header's
 			// base style in Chrome/Firefox, but Safari renders `::-webkit-details-marker` regardless of
 			// `display`, so a stray triangle would sit next to our chevron unless the pseudo-element is
 			// killed explicitly. `list-style: none` is kept for completeness (browsers that box the
 			// marker as a list-item marker box), the `::-webkit-details-marker` rule is what actually
 			// fixes Safari.
-			'.e-accordion-item-header-base { list-style: none; }',
+			'.e-accordion-item-header-base { list-style: none; min-block-size: 44px; }',
 			'.e-accordion-item-header-base::-webkit-details-marker { display: none; }',
+			'.e-accordion-item-header-base:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }',
+			'.e-accordion-item-title-base, .e-accordion-item-content-base { min-inline-size: 0; overflow-wrap: anywhere; }',
+			'.e-accordion-item-header-base > .e-accordion-item-icon-base { max-inline-size: 2rem; }',
+			'.elementor-edit-mode .e-accordion-item-header-base > .e-accordion-item-icon-base { max-inline-size: 35%; }',
 			// Animated expand/collapse via `::details-content` (block-size 0 -> auto) needs
 			// `interpolate-size: allow-keywords` on the <details> element to let `block-size: auto`
 			// participate in the transition. Graceful degradation is deliberate here, but the two failure
@@ -693,6 +702,10 @@ class Module extends BaseModule {
 			'.e-accordion-item-icon-base.e-accordion-item-icon-base .e-svg-base svg { width: auto !important; }',
 			'.e-accordion-item-icon-base svg { transition: transform .3s ease; }',
 			'.e-accordion-item-base[open] > summary .e-accordion-item-icon-base svg { transform: rotate(180deg); }',
+			'@media (prefers-reduced-motion: reduce) {',
+			'.e-accordion-item-base::details-content { transition: none; }',
+			'.e-accordion-item-icon-base svg { transition: none; }',
+			'}',
 		] );
 		wp_add_inline_style( 'elementor-frontend', $inline_css );
 		wp_add_inline_style( 'elementor-editor', $inline_css );

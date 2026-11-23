@@ -17,7 +17,7 @@ export const getTabContentId = ( tabsId, tabIndex ) => {
 export const getChildren = ( el, elementType ) => {
 	const parent = el.parentElement;
 
-	return Array.from( parent.children ).filter( ( child ) => {
+	return Array.from( parent?.children ?? [] ).filter( ( child ) => {
 		return child.dataset.element_type === elementType;
 	} );
 };

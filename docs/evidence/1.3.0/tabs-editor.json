@@ -1,0 +1,204 @@
+{
+  "mode": "tabs-editor",
+  "version": "1.3.0",
+  "environment": [
+    "7.1.5",
+    "8.4.27",
+    "8.4.6",
+    "Twenty Twenty-Five"
+  ],
+  "sha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+  "cases": {
+    "panelSearchInsert": {
+      "status": "passed",
+      "actor": "WordPress Editor",
+      "nativeType": "e-tabs",
+      "originalSeedCount": 2,
+      "initial": [
+        [
+          "40d8081",
+          "444b728"
+        ],
+        [
+          "c526ec5",
+          "0467db1"
+        ]
+      ]
+    },
+    "pairedOperations": {
+      "status": "passed",
+      "addedPair": [
+        "08f0597",
+        "dc7c243"
+      ],
+      "removedTailFallback": [
+        "c526ec5",
+        "0467db1"
+      ],
+      "reorderDefaultFollowsSameIdentity": true,
+      "pairedUndoRedo": true,
+      "final": [
+        [
+          "c526ec5",
+          "0467db1"
+        ],
+        [
+          "40d8081",
+          "444b728"
+        ]
+      ]
+    },
+    "realEdits": {
+      "status": "passed",
+      "labelsEdited": [
+        "53a1315",
+        "fb9214f"
+      ],
+      "contentEdited": [
+        "5149bf3",
+        "6d25786"
+      ],
+      "imageAttachment": 200,
+      "hiddenLinkId": "75a6c5a"
+    },
+    "ordinaryEditorSaveReopen": {
+      "status": "passed",
+      "freshContext": true,
+      "pairs": [
+        [
+          "c526ec5",
+          "0467db1"
+        ],
+        [
+          "40d8081",
+          "444b728"
+        ]
+      ],
+      "defaultIndex": 0,
+      "preservedNativeChildren": true
+    }
+  },
+  "opens": [
+    {
+      "label": "ordinary-editor-empty-page",
+      "id": 201,
+      "ms": 41982,
+      "assets": [
+        {
+          "name": "editor-elements.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "editor-editing-panel.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-handler.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-preview-handler.min.js",
+          "ver": "1.3.0"
+        }
+      ]
+    },
+    {
+      "label": "ordinary-editor-fresh-session",
+      "id": 201,
+      "ms": 30737,
+      "assets": [
+        {
+          "name": "editor-elements.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "editor-editing-panel.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-handler.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-preview-handler.min.js",
+          "ver": "1.3.0"
+        }
+      ]
+    }
+  ],
+  "jsErrors": [],
+  "http5xx": [],
+  "environmentWarnings": [],
+  "previewActions": [
+    {
+      "index": 0,
+      "wanted": "c526ec5",
+      "selectedPanel": "0467db1",
+      "preview": {
+        "nativeRoot": "2ec3dd0",
+        "instanceKey": "2ec3dd0",
+        "settings": "{\"default-active-tab\":\"2ec3dd0-tab-0\"}",
+        "tabs": [
+          {
+            "id": "c526ec5",
+            "selected": "true",
+            "htmlId": "2ec3dd0-tab-0"
+          },
+          {
+            "id": "40d8081",
+            "selected": "false",
+            "htmlId": "2ec3dd0-tab-1"
+          }
+        ],
+        "panels": [
+          {
+            "id": "0467db1",
+            "hidden": false,
+            "htmlId": "2ec3dd0-tab-content-0"
+          },
+          {
+            "id": "444b728",
+            "hidden": true,
+            "htmlId": "2ec3dd0-tab-content-1"
+          }
+        ]
+      }
+    },
+    {
+      "index": 1,
+      "wanted": "40d8081",
+      "selectedPanel": "444b728",
+      "preview": {
+        "nativeRoot": "2ec3dd0",
+        "instanceKey": "2ec3dd0",
+        "settings": "{\"default-active-tab\":\"2ec3dd0-tab-0\"}",
+        "tabs": [
+          {
+            "id": "c526ec5",
+            "selected": "false",
+            "htmlId": "2ec3dd0-tab-0"
+          },
+          {
+            "id": "40d8081",
+            "selected": "true",
+            "htmlId": "2ec3dd0-tab-1"
+          }
+        ],
+        "panels": [
+          {
+            "id": "0467db1",
+            "hidden": true,
+            "htmlId": "2ec3dd0-tab-content-0"
+          },
+          {
+            "id": "444b728",
+            "hidden": false,
+            "htmlId": "2ec3dd0-tab-content-1"
+          }
+        ]
+      }
+    }
+  ],
+  "phpApplicationWarnings": [],
+  "status": "passed"
+}

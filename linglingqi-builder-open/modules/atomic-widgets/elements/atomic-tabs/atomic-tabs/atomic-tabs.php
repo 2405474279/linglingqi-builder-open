@@ -5,6 +5,8 @@ use Elementor\Modules\AtomicWidgets\Elements\Atomic_Paragraph\Atomic_Paragraph;
 use Elementor\Modules\AtomicWidgets\Elements\Base\Atomic_Element_Base;
 use Elementor\Modules\AtomicWidgets\Elements\Base\Has_Element_Template;
 use Elementor\Modules\AtomicWidgets\Elements\Base\Html_Tag_Computer;
+use Elementor\Modules\AtomicWidgets\Elements\Base\Render_Context;
+use Elementor\Modules\AtomicWidgets\PropTypes\Escaped_Html_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Primitives\Number_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Primitives\String_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Size_Prop_Type;
@@ -56,15 +58,11 @@ class Atomic_Tabs extends Atomic_Element_Base {
 	}
 
 	public function get_title() {
-		return esc_html__( 'Tabs', 'elementor' );
-	}
-
-	protected function should_show_in_panel() {
-		return false;
+		return esc_html__( '原子选项卡', 'elementor' );
 	}
 
 	public function get_keywords() {
-		return [ 'ato', 'atom', 'atoms', 'atomic' ];
+		return [ 'atomic', 'tabs', 'tab', '选项卡', '标签页', '原子' ];
 	}
 
 	public function get_icon() {
@@ -93,7 +91,7 @@ class Atomic_Tabs extends Atomic_Element_Base {
 				->set_id( 'content' )
 				->set_items( [
 					Tabs_Control::make()
-					->set_label( __( 'Menu items', 'elementor' ) )
+					->set_label( __( '选项卡条目', 'elementor' ) )
 					->set_meta( [
 						'layout' => 'custom',
 					] ),
@@ -137,22 +135,40 @@ class Atomic_Tabs extends Atomic_Element_Base {
 	}
 
 	protected function define_default_children() {
-		$default_tab_count = 3;
 		$tab_elements = [];
 		$tab_content_elements = [];
 
-		foreach ( range( 1, $default_tab_count ) as $i ) {
+		$examples = [
+			[ __( '概览', 'elementor' ), __( '在这里介绍页面的要点。', 'elementor' ) ],
+			[ __( '使用说明', 'elementor' ), __( '选中这个内容面板，可以加入图片、按钮或其他原子组件。', 'elementor' ) ],
+		];
+
+		foreach ( $examples as $index => [ $label, $body ] ) {
+			$position = $index + 1;
 			$tab_elements[] = Atomic_Tab::generate()
 				->editor_settings( [
-					'title' => "Tab {$i} trigger",
-					'initial_position' => $i,
+					'title' => $label,
+					'initial_position' => $position,
+				] )
+				->children( [
+					Atomic_Paragraph::generate()
+						->settings( [
+							'paragraph' => Escaped_Html_Prop_Type::generate( $label ),
+							'tag' => String_Prop_Type::generate( 'span' ),
+						] )
+						->build(),
 				] )
 				->build();
 
 			$tab_content_elements[] = Atomic_Tab_Content::generate()
 				->editor_settings( [
-					'title' => "Tab {$i} content",
-					'initial_position' => $i,
+					'title' => $label,
+					'initial_position' => $position,
+				] )
+				->children( [
+					Atomic_Paragraph::generate()
+						->settings( [ 'paragraph' => Escaped_Html_Prop_Type::generate( $body ) ] )
+						->build(),
 				] )
 				->build();
 		}
@@ -214,37 +230,39 @@ class Atomic_Tabs extends Atomic_Element_Base {
 			->all();
 	}
 
-	private function get_tab_index( $tab_id ) {
-		$direct_children = Collection::make( $this->get_children() );
-		$tabs_menu = $direct_children->filter( fn( $child ) => $child->get_type() === self::ELEMENT_TYPE_TABS_MENU )->first();
-
-		$tab_ids = $this->get_filtered_children_ids( $tabs_menu, self::ELEMENT_TYPE_TAB );
-
-		return $tab_ids[ $tab_id ];
-	}
-
-	private function get_tab_content_index( $tab_content_id ) {
-		$direct_children = Collection::make( $this->get_children() );
-		$tabs_content_area = $direct_children->filter( fn( $child ) => $child->get_type() === self::ELEMENT_TYPE_TABS_CONTENT_AREA )->first();
-
-		$tab_content_ids = $this->get_filtered_children_ids( $tabs_content_area, self::ELEMENT_TYPE_TAB_CONTENT );
-
-		return $tab_content_ids[ $tab_content_id ];
-	}
-
 	protected function define_render_context(): array {
-		$default_active_tab = $this->get_atomic_setting( 'default-active-tab' );
+		$children = Collection::make( $this->get_children() );
+		$menu = $children->filter( fn( $child ) => $child->get_type() === self::ELEMENT_TYPE_TABS_MENU )->first();
+		$content_area = $children->filter( fn( $child ) => $child->get_type() === self::ELEMENT_TYPE_TABS_CONTENT_AREA )->first();
+		$tabs = $this->get_filtered_children_ids( $menu, self::ELEMENT_TYPE_TAB );
+		$panels = $this->get_filtered_children_ids( $content_area, self::ELEMENT_TYPE_TAB_CONTENT );
+		$paired_count = min( count( $tabs ), count( $panels ) );
+		$default_active_tab = (int) $this->get_atomic_setting( 'default-active-tab' );
+		if ( $default_active_tab < 0 || $default_active_tab >= $paired_count ) {
+			$default_active_tab = 0;
+		}
+
+		$tabs_id = Plugin::$instance->preview->is_preview_mode() ? $this->get_id() : wp_unique_id( 'llq_tabs_' );
 
 		return [
 			[
 				'context' => [
 					'default-active-tab' => $default_active_tab,
-					'get-tab-index' => fn( $tab_id ) => $this->get_tab_index( $tab_id ),
-					'get-tab-content-index' => fn( $tab_content_id ) => $this->get_tab_content_index( $tab_content_id ),
-					'tabs-id' => $this->get_id(),
+					'get-tab-index' => fn( $tab_id ) => $tabs[ $tab_id ] ?? null,
+					'get-tab-content-index' => fn( $tab_content_id ) => $panels[ $tab_content_id ] ?? null,
+					'tabs-id' => $tabs_id,
 				],
 			],
 		];
+	}
+
+	protected function build_template_context(): array {
+		$context = Render_Context::get( self::class );
+
+		return array_merge( $this->build_base_template_context(), [
+			'tabs_instance_id' => $context['tabs-id'] ?? $this->get_id(),
+			'tabs_default_index' => $context['default-active-tab'] ?? 0,
+		] );
 	}
 
 	protected function get_templates(): array {

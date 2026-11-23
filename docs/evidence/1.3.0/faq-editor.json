@@ -1,0 +1,99 @@
+{
+  "mode": "faq-editor",
+  "version": "1.3.0",
+  "environment": [
+    "7.1.5",
+    "8.4.27",
+    "8.4.6",
+    "Twenty Twenty-Five"
+  ],
+  "sha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+  "cases": {
+    "searchAndInsert": {
+      "status": "passed",
+      "widgetType": "e-accordion",
+      "initialItems": [
+        "cb864ff",
+        "94cfdf5"
+      ]
+    },
+    "questionAnswerWithCanvas": {
+      "status": "passed",
+      "questionsEdited": 2,
+      "answersEdited": 2,
+      "canvasSelectedId": "bc99a66"
+    },
+    "repeaterHistory": {
+      "status": "passed",
+      "addedId": "706b12b",
+      "orderBefore": [
+        "cb864ff",
+        "94cfdf5"
+      ],
+      "orderAfter": [
+        "94cfdf5",
+        "cb864ff"
+      ],
+      "undoRedo": true
+    },
+    "optionsAndSeoOff": {
+      "status": "passed",
+      "closedByDefault": true,
+      "multipleAllowed": true,
+      "outputFaqSchemaCount": 0
+    },
+    "seoOnAndSaved": {
+      "status": "passed",
+      "schemaType": "FAQPage",
+      "questions": 2,
+      "firstOpen": true,
+      "exclusiveGroup": true,
+      "reopen": true
+    }
+  },
+  "opens": [
+    {
+      "label": "clean-post",
+      "id": 214,
+      "ms": 48254,
+      "assets": [
+        {
+          "name": "editor-elements.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "editor-editing-panel.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "accordion-preview-handler.min.js",
+          "ver": "1.3.0"
+        }
+      ]
+    },
+    {
+      "label": "fresh-session-after-edits",
+      "id": 214,
+      "ms": 92861,
+      "assets": [
+        {
+          "name": "editor-elements.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "editor-editing-panel.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "accordion-preview-handler.min.js",
+          "ver": "1.3.0"
+        }
+      ]
+    }
+  ],
+  "jsErrors": [],
+  "http5xx": [],
+  "environmentWarnings": [],
+  "phpApplicationWarnings": [],
+  "status": "passed"
+}

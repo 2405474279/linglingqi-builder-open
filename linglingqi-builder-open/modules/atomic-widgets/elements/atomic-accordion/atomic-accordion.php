@@ -41,8 +41,6 @@ class Atomic_Accordion extends Atomic_Element_Base {
 	const ELEMENT_TYPE_ICON = 'e-accordion-item-icon';
 	const ELEMENT_TYPE_CONTENT = 'e-accordion-item-content';
 
-	const DEFAULT_ITEM_COUNT = 2;
-
 	public static $widget_description = 'Create collapsible content sections using native <details>/<summary> semantics, with no JavaScript needed for the toggle. Structure: e-accordion contains e-accordion-item elements; each item contains an e-accordion-item-header (holding e-accordion-item-title and an optional e-accordion-item-icon) and an e-accordion-item-content that accepts any element.';
 
 	public function __construct( $data = [], $args = null ) {
@@ -60,15 +58,11 @@ class Atomic_Accordion extends Atomic_Element_Base {
 	}
 
 	public function get_title() {
-		return esc_html__( 'Accordion', 'elementor' );
-	}
-
-	protected function should_show_in_panel() {
-		return false;
+		return esc_html__( '原子 FAQ', 'elementor' );
 	}
 
 	public function get_keywords() {
-		return [ 'ato', 'atom', 'atoms', 'atomic', 'accordion', 'faq', 'collapse' ];
+		return [ 'atomic', 'accordion', 'faq', 'collapse', '原子', '常见问题', '折叠', '问答' ];
 	}
 
 	public function get_icon() {
@@ -114,7 +108,7 @@ class Atomic_Accordion extends Atomic_Element_Base {
 				->set_id( 'content' )
 				->set_items( [
 					Accordion_Items_Control::make()
-						->set_label( __( 'Accordion Items', 'elementor' ) )
+						->set_label( __( '问答条目', 'elementor' ) )
 						->set_meta( [
 							'layout' => 'custom',
 						] ),
@@ -180,30 +174,21 @@ class Atomic_Accordion extends Atomic_Element_Base {
 	}
 
 	protected function define_default_children() {
-		$items = [];
-
-		foreach ( range( 1, self::DEFAULT_ITEM_COUNT ) as $i ) {
-			$items[] = $this->build_default_item( $i );
-		}
-
-		return $items;
+		return [
+			$this->build_default_item(
+				1,
+				__( '如何编辑问题和答案？', 'elementor' ),
+				__( '在画布中展开条目，再选择问题或答案编辑。也可以用内容面板里的编辑按钮。', 'elementor' )
+			),
+			$this->build_default_item(
+				2,
+				__( '可以同时展开多个问题吗？', 'elementor' ),
+				__( '可以。在设置中选择允许同时展开一个条目或多个条目。', 'elementor' )
+			),
+		];
 	}
 
-	/**
-	 * Builds one `e-accordion-item` with its numbered title seeded explicitly.
-	 *
-	 * Each level of `default_children` is hydrated independently client-side
-	 * (`Atomic_Element_Base_Model::onElementCreate()`, driven by `hydrateDefaultChildren: true`),
-	 * so the title slot's own `define_default_children()` has no way to know which item it
-	 * belongs to. Building the item → header → title → paragraph chain explicitly here lets the
-	 * numbered text ("Accordion Item 1", "Accordion Item 2") reach the rendered paragraph. The
-	 * icon and content branches don't need per-index content, so they keep using their own
-	 * `define_default_children()` via `hydrate_default_children( true )`.
-	 *
-	 * @param int $index
-	 * @return array
-	 */
-	private function build_default_item( int $index ): array {
+	private function build_default_item( int $index, string $question, string $answer ): array {
 		/* translators: %d: Accordion item position. */
 		$numbered_title = sprintf( esc_html__( 'Accordion Item %d', 'elementor' ), $index );
 
@@ -214,7 +199,7 @@ class Atomic_Accordion extends Atomic_Element_Base {
 			->children( [
 				Atomic_Paragraph::generate()
 					->settings( [
-						'paragraph' => Escaped_Html_Prop_Type::generate( $numbered_title ),
+						'paragraph' => Escaped_Html_Prop_Type::generate( $question ),
 						'tag' => String_Prop_Type::generate( 'span' ),
 					] )
 					->build(),
@@ -253,9 +238,15 @@ class Atomic_Accordion extends Atomic_Element_Base {
 			->build();
 
 		$content = Element_Builder::make( self::ELEMENT_TYPE_CONTENT )
-			->hydrate_default_children( true )
 			->editor_settings( [
 				'title' => esc_html__( 'Content', 'elementor' ),
+			] )
+			->children( [
+				Atomic_Paragraph::generate()
+					->settings( [
+						'paragraph' => Escaped_Html_Prop_Type::generate( $answer ),
+					] )
+					->build(),
 			] )
 			->build();
 
@@ -462,7 +453,7 @@ class Atomic_Accordion extends Atomic_Element_Base {
 			'@context' => 'https://schema.org',
 			'@type' => 'FAQPage',
 			'mainEntity' => $entities,
-		] );
+		], JSON_HEX_TAG | JSON_HEX_AMP );
 	}
 
 	/**
@@ -591,7 +582,7 @@ class Atomic_Accordion extends Atomic_Element_Base {
 		return [
 			[
 				'context' => [
-					'accordion-id' => $this->get_id(),
+					'accordion-id' => wp_unique_id( 'llq-faq-' . $this->get_id() . '-' ),
 					'get-item-index' => fn( $item_id ) => $this->get_item_index( $item_id ),
 					'default-state' => $this->get_atomic_setting( 'default_state' ),
 					'max-expanded' => $this->get_atomic_setting( 'max_expanded' ),

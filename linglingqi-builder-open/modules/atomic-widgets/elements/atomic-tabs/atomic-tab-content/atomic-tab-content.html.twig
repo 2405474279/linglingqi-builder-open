@@ -7,11 +7,12 @@
     data-interaction-id="{{ interaction_id }}"
     data-interactions="{{ interactions | json_encode | e('html_attr') }}"
     role="tabpanel"
+    tabindex="0"
     x-bind="tabContent"
     x-ref="{{ id }}"
-    id="{{ tab_content_id }}"
-    aria-labelledby="{{ tab_id }}"
-    {% if not is_active %} hidden="true" style="display: none;"{% endif %}
+    {% if tab_content_id %}id="{{ tab_content_id | e('html_attr') }}"{% endif %}
+    {% if tab_id %}aria-labelledby="{{ tab_id | e('html_attr') }}"{% endif %}
+    {% if not is_active %}hidden{% endif %}
     {% if settings.attributes is defined and settings.attributes is not empty %}
         {{ settings.attributes | raw }}
     {% endif %}

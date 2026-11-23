@@ -1,6 +1,6 @@
 import { register } from '@elementor/frontend-handlers';
 import { Alpine } from '@elementor/alpinejs';
-import { TAB_ELEMENT_TYPE, TAB_CONTENT_ELEMENT_TYPE, getTabId, getTabContentId, getIndex, getNextTab, getDirectTabCount } from './utils';
+import { TAB_ELEMENT_TYPE, TAB_CONTENT_ELEMENT_TYPE, getTabId, getTabContentId, getIndex, getChildren, getDirectTabCount } from './utils';
 import { getActiveTabId, setActiveTabIndex, validateActiveTab } from './editor-tabs-state';
 
 const SELECTED_CLASS = 'e--selected';
@@ -9,8 +9,8 @@ register( {
 	elementType: 'e-tabs',
 	id: 'e-tabs-handler',
 	callback: ( { element, settings } ) => {
-		const tabsId = element.dataset.id;
-		const defaultActiveTab = settings[ 'default-active-tab' ];
+		const tabsId = element.dataset.eTabsInstance || element.dataset.id;
+		const defaultActiveTab = settings[ 'default-active-tab' ] || getTabId( tabsId, 0 );
 
 		Alpine.data( `eTabs${ tabsId }`, () => ( {
 			init() {
@@ -19,11 +19,39 @@ register( {
 			get activeTab() {
 				return getActiveTabId( tabsId, defaultActiveTab );
 			},
+			activateTab( tab ) {
+				const index = getIndex( tab, TAB_ELEMENT_TYPE );
+				if ( index >= 0 ) {
+					setActiveTabIndex( tabsId, index );
+				}
+			},
 
-			navigateTabs( { key, target: tab } ) {
-				const nextTab = getNextTab( key, tab );
+			navigateTabs( event ) {
+				const { key, currentTarget: tab } = event;
+				if ( ! [ 'ArrowLeft', 'ArrowRight', 'Home', 'End' ].includes( key ) ) {
+					return;
+				}
 
-				nextTab.focus();
+				const tabs = getChildren( tab, TAB_ELEMENT_TYPE );
+				const currentIndex = tabs.indexOf( tab );
+				if ( currentIndex < 0 ) {
+					return;
+				}
+
+				let nextIndex;
+				if ( 'Home' === key ) {
+					nextIndex = 0;
+				} else if ( 'End' === key ) {
+					nextIndex = tabs.length - 1;
+				} else {
+					const isRtl = 'rtl' === window.getComputedStyle( tab ).direction;
+					const step = ( key === 'ArrowRight' ) !== isRtl ? 1 : -1;
+					nextIndex = ( currentIndex + step + tabs.length ) % tabs.length;
+				}
+
+				event.preventDefault();
+				setActiveTabIndex( tabsId, nextIndex );
+				tabs[ nextIndex ].focus();
 			},
 			tab: {
 				':id'() {
@@ -32,12 +60,12 @@ register( {
 					return getTabId( tabsId, index );
 				},
 				'@click'() {
-					setActiveTabIndex( tabsId, getIndex( this.$el, TAB_ELEMENT_TYPE ) );
+					this.activateTab( this.$el );
 				},
-				'@keydown.arrow-right.prevent'( event ) {
-					this.navigateTabs( event );
+				'@focus'() {
+					this.activateTab( this.$el );
 				},
-				'@keydown.arrow-left.prevent'( event ) {
+				'@keydown'( event ) {
 					this.navigateTabs( event );
 				},
 				':class'() {
@@ -68,17 +96,11 @@ register( {
 
 					return getTabId( tabsId, index );
 				},
-				'x-show'() {
-					const index = getIndex( this.$el, TAB_CONTENT_ELEMENT_TYPE );
-					const tabId = getTabId( tabsId, index );
-
-					const isActive = this.activeTab === tabId;
-
-					this.$nextTick( () => {
-						this.$el.classList.toggle( SELECTED_CLASS, isActive );
-					} );
-
-					return isActive;
+				':hidden'() {
+					return this.activeTab !== getTabId( tabsId, getIndex( this.$el, TAB_CONTENT_ELEMENT_TYPE ) );
+				},
+				':class'() {
+					return { [ SELECTED_CLASS ]: this.activeTab === getTabId( tabsId, getIndex( this.$el, TAB_CONTENT_ELEMENT_TYPE ) ) };
 				},
 				':id'() {
 					const index = getIndex( this.$el, TAB_CONTENT_ELEMENT_TYPE );

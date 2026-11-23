@@ -5737,8 +5737,15 @@ react = __toESM(react);
 				elType: ACCORDION_ITEM_CONTENT_ELEMENT_TYPE,
 				id: (0, _elementor_editor_elements.generateElementId)(),
 				editor_settings: { title: (0, _wordpress_i18n.__)("Content", "elementor") },
-				elements: [],
-				hydrateDefaultChildren: true
+				elements: [{
+					elType: "widget",
+					widgetType: PARAGRAPH_WIDGET_TYPE,
+					id: (0, _elementor_editor_elements.generateElementId)(),
+					elements: [],
+					settings: {
+						paragraph: _elementor_editor_props.escapedHtmlPropTypeUtil.create((0, _wordpress_i18n.__)("请编辑此条目的答案。", "elementor"))
+					}
+				}]
 			}]
 		};
 	};
@@ -5913,8 +5920,31 @@ react = __toESM(react);
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
 			p: 2,
 			gap: 1.5
-		}, /* @__PURE__ */ react.createElement(ItemNameControl, { elementId: value.id }));
+		}, /* @__PURE__ */ react.createElement(ItemNameControl, { elementId: value.id }), react.createElement(AccordionItemEditActions, { elementId: value.id }));
 	}, "ItemContent");
+	var AccordionItemEditActions = ({ elementId }) => {
+		const item = (0, _elementor_editor_elements.getContainer)(elementId);
+		const childOfType = (parent, type) => parent?.children?.find((child) => child.model.get("elType") === type);
+		const paragraphIn = (parent) => parent?.children?.find((child) => child.model.get("widgetType") === PARAGRAPH_WIDGET_TYPE);
+		const header = childOfType(item, ACCORDION_ITEM_HEADER_ELEMENT_TYPE$1);
+		const title = childOfType(header, ACCORDION_ITEM_TITLE_ELEMENT_TYPE);
+		const content = childOfType(item, ACCORDION_ITEM_CONTENT_ELEMENT_TYPE);
+		const questionId = (paragraphIn(title) ?? title)?.id;
+		const answerId = (paragraphIn(content) ?? content)?.id;
+		return react.createElement(_elementor_ui.Stack, {
+			direction: "row",
+			gap: 1,
+			sx: { flexWrap: "wrap" }
+		}, react.createElement(_elementor_ui.Button, {
+			size: "small",
+			disabled: !questionId,
+			onClick: () => (0, _elementor_editor_elements.selectElement)(questionId)
+		}, (0, _wordpress_i18n.__)("编辑问题", "elementor")), react.createElement(_elementor_ui.Button, {
+			size: "small",
+			disabled: !answerId,
+			onClick: () => (0, _elementor_editor_elements.selectElement)(answerId)
+		}, (0, _wordpress_i18n.__)("编辑答案", "elementor")));
+	};
 	var ItemNameControl = ({ elementId }) => {
 		const label = (0, _elementor_editor_elements.useElementEditorSettings)(elementId)?.title ?? "";
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: 1 }, /* @__PURE__ */ react.createElement(_elementor_editor_controls.ControlFormLabel, null, (0, _wordpress_i18n.__)("Name", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.TextField, {
@@ -6157,42 +6187,67 @@ react = __toESM(react);
 //#region packages/packages/core/editor-editing-panel/src/controls-registry/element-controls/tabs-control/use-actions.ts
 	var TAB_ELEMENT_TYPE = "e-tab";
 	var TAB_CONTENT_ELEMENT_TYPE = "e-tab-content";
+	var tabsChildren = (id, type) => ((0, _elementor_editor_elements.getContainer)(id)?.children ?? []).filter((child) => child.model.get("elType") === type);
+	function showTabInPreview(rootId, index) {
+		window.dispatchEvent(new CustomEvent("linglingqi/tabs/activate", { detail: { rootId, index } }));
+	}
+	function tabsParagraph(text, tag = "p") {
+		return {
+			id: (0, _elementor_editor_elements.generateElementId)(),
+			elType: "widget",
+			widgetType: "e-paragraph",
+			settings: {
+				paragraph: _elementor_editor_props.escapedHtmlPropTypeUtil.create(text),
+				tag: _elementor_editor_props.stringPropTypeUtil.create(tag)
+			},
+			elements: []
+		};
+	}
 	var useActions = () => {
+		const { element } = useElement();
 		const { value, setValue: setDefaultActiveTab } = (0, _elementor_editor_controls.useBoundProp)(_elementor_editor_props.numberPropTypeUtil);
 		const defaultActiveTab = value ?? 0;
-		const duplicateItem = ({ items, tabContentAreaId }) => {
+		const previewIndex = (tabsMenuId) => {
+			const active = tabsChildren(tabsMenuId, TAB_ELEMENT_TYPE).findIndex(({ id }) => (0, _elementor_editor_elements.getPreviewElementDOM)(id)?.getAttribute("aria-selected") === "true");
+			return active >= 0 ? active : defaultActiveTab;
+		};
+		const applyIndexes = (defaultIndex, activeIndex) => {
+			setDefaultActiveTab(defaultIndex, {}, { withHistory: false });
+			showTabInPreview(element.id, activeIndex);
+		};
+		const duplicateItem = ({ items, tabsMenuId, tabContentAreaId }) => {
+			const active = previewIndex(tabsMenuId);
 			const newDefault = calculateDefaultOnDuplicate({
 				items,
 				defaultActiveTab
 			});
+			const newActive = calculateDefaultOnDuplicate({ items, defaultActiveTab: active });
+			const panels = tabsChildren(tabContentAreaId, TAB_CONTENT_ELEMENT_TYPE);
+			if (items.some(({ index }) => !panels[index])) return;
 			items.forEach(({ item, index }) => {
 				const tabId = item.id;
-				const tabContentId = (0, _elementor_editor_elements.getContainer)(tabContentAreaId)?.children?.[index]?.id;
-				if (!tabContentId) throw new Error("Original content ID is required for duplication");
+				const tabContentId = panels[index].id;
 				(0, _elementor_editor_elements.duplicateElements)({
 					elementIds: [tabId, tabContentId],
 					title: (0, _wordpress_i18n.__)("Duplicate Tab", "elementor"),
-					onDuplicateElements: () => {
-						if (newDefault !== defaultActiveTab) setDefaultActiveTab(newDefault, {}, { withHistory: false });
-					},
-					onRestoreElements: () => {
-						if (newDefault !== defaultActiveTab) setDefaultActiveTab(defaultActiveTab, {}, { withHistory: false });
-					}
+					onDuplicateElements: () => applyIndexes(newDefault, newActive),
+					onRestoreElements: () => applyIndexes(defaultActiveTab, active)
 				});
 			});
 		};
 		const moveItem = ({ toIndex, tabsMenuId, tabContentAreaId, movedElementId, movedElementIndex }) => {
 			const tabContentContainer = (0, _elementor_editor_elements.getContainer)(tabContentAreaId);
-			const tabContent = tabContentContainer?.children?.[movedElementIndex];
+			const tabContent = tabsChildren(tabContentAreaId, TAB_CONTENT_ELEMENT_TYPE)[movedElementIndex];
 			const movedElement = (0, _elementor_editor_elements.getContainer)(movedElementId);
 			const tabsMenu = (0, _elementor_editor_elements.getContainer)(tabsMenuId);
-			if (!tabContent) throw new Error("Content element is required");
-			if (!movedElement || !tabsMenu) throw new Error("Tab element or menu not found");
+			if (!tabContent || !movedElement || !tabsMenu) return;
+			const active = previewIndex(tabsMenuId);
 			const newDefault = calculateDefaultOnMove({
 				from: movedElementIndex,
 				to: toIndex,
 				defaultActiveTab
 			});
+			const newActive = calculateDefaultOnMove({ from: movedElementIndex, to: toIndex, defaultActiveTab: active });
 			(0, _elementor_editor_elements.moveElements)({
 				title: (0, _wordpress_i18n.__)("Reorder Tabs", "elementor"),
 				moves: [{
@@ -6204,33 +6259,22 @@ react = __toESM(react);
 					targetContainer: tabContentContainer,
 					options: { at: toIndex }
 				}],
-				onMoveElements: () => {
-					if (newDefault !== defaultActiveTab) setDefaultActiveTab(newDefault, {}, { withHistory: false });
-				},
-				onRestoreElements: () => {
-					if (newDefault !== defaultActiveTab) setDefaultActiveTab(defaultActiveTab, {}, { withHistory: false });
-				}
+				onMoveElements: () => applyIndexes(newDefault, newActive),
+				onRestoreElements: () => applyIndexes(defaultActiveTab, active)
 			});
 		};
-		const removeItem = ({ items, tabContentAreaId }) => {
-			const newDefault = calculateDefaultOnRemove({
-				items,
-				defaultActiveTab
-			});
+		const removeItem = ({ items, tabsMenuId, tabContentAreaId }) => {
+			const panels = tabsChildren(tabContentAreaId, TAB_CONTENT_ELEMENT_TYPE);
+			const tabCount = tabsChildren(tabsMenuId, TAB_ELEMENT_TYPE).length;
+			if (items.some(({ index }) => !panels[index]) || items.length >= tabCount) return;
+			const active = previewIndex(tabsMenuId);
+			const newDefault = calculateDefaultOnRemove({ items, defaultActiveTab, tabCount });
+			const newActive = calculateDefaultOnRemove({ items, defaultActiveTab: active, tabCount });
 			(0, _elementor_editor_elements.removeElements)({
 				title: (0, _wordpress_i18n.__)("Tabs", "elementor"),
-				elementIds: items.flatMap(({ item, index }) => {
-					const tabId = item.id;
-					const tabContentId = (0, _elementor_editor_elements.getContainer)(tabContentAreaId)?.children?.[index]?.id;
-					if (!tabContentId) throw new Error("Content ID is required");
-					return [tabId, tabContentId];
-				}),
-				onRemoveElements: () => {
-					if (newDefault !== defaultActiveTab) setDefaultActiveTab(newDefault, {}, { withHistory: false });
-				},
-				onRestoreElements: () => {
-					if (newDefault !== defaultActiveTab) setDefaultActiveTab(defaultActiveTab, {}, { withHistory: false });
-				}
+				elementIds: items.flatMap(({ item, index }) => [item.id, panels[index].id]),
+				onRemoveElements: () => applyIndexes(newDefault, newActive),
+				onRestoreElements: () => applyIndexes(defaultActiveTab, active)
 			});
 		};
 		const addItem = ({ tabContentAreaId, tabsMenuId, items }) => {
@@ -6239,23 +6283,28 @@ react = __toESM(react);
 			if (!tabContentArea || !tabsMenu) throw new Error("Tab containers not found");
 			items.forEach(({ index }) => {
 				const position = index + 1;
+				const label = (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("选项卡 %d", "elementor"), position);
 				(0, _elementor_editor_elements.createElements)({
 					title: (0, _wordpress_i18n.__)("Tabs", "elementor"),
 					elements: [{
 						container: tabContentArea,
 						model: {
+							id: (0, _elementor_editor_elements.generateElementId)(),
 							elType: TAB_CONTENT_ELEMENT_TYPE,
+							elements: [tabsParagraph((0, _wordpress_i18n.__)("在这里编辑选项卡的内容。", "elementor"))],
 							editor_settings: {
-								title: `Tab ${position} content`,
+								title: label,
 								initial_position: position
 							}
 						}
 					}, {
 						container: tabsMenu,
 						model: {
+							id: (0, _elementor_editor_elements.generateElementId)(),
 							elType: TAB_ELEMENT_TYPE,
+							elements: [tabsParagraph(label, "span")],
 							editor_settings: {
-								title: `Tab ${position} trigger`,
+								title: label,
 								initial_position: position
 							}
 						}
@@ -6276,9 +6325,9 @@ react = __toESM(react);
 		if (from > defaultActiveTab && to <= defaultActiveTab) return defaultActiveTab + 1;
 		return defaultActiveTab;
 	};
-	var calculateDefaultOnRemove = ({ items, defaultActiveTab }) => {
-		if (items.some(({ index }) => index === defaultActiveTab)) return 0;
-		return defaultActiveTab - items.reduce((acc, { index }) => index < defaultActiveTab ? acc + 1 : acc, 0);
+	var calculateDefaultOnRemove = ({ items, defaultActiveTab, tabCount }) => {
+		const removedBefore = items.filter(({ index }) => index < defaultActiveTab).length;
+		return Math.max(0, Math.min(defaultActiveTab - removedBefore, tabCount - items.length - 1));
 	};
 	var calculateDefaultOnDuplicate = ({ items, defaultActiveTab }) => {
 		return defaultActiveTab + items.reduce((acc, { index }) => {
@@ -6302,6 +6351,11 @@ react = __toESM(react);
 		const { [TAB_ELEMENT_TYPE]: tabLinks } = (0, _elementor_editor_elements.useElementChildren)(element.id, { [TAB_MENU_ELEMENT_TYPE]: TAB_ELEMENT_TYPE });
 		const tabList = getElementByType(element.id, TAB_MENU_ELEMENT_TYPE);
 		const tabContentArea = getElementByType(element.id, TAB_CONTENT_AREA_ELEMENT_TYPE);
+		const itemContent = (0, react.useCallback)((props) => react.createElement(ItemContent, {
+			...props,
+			rootId: element.id,
+			panelId: tabsChildren(tabContentArea?.id, TAB_CONTENT_ELEMENT_TYPE)[props.index]?.id
+		}), [element.id, tabContentArea?.id]);
 		const repeaterValues = tabLinks.map((tabLink, index) => {
 			return {
 				id: tabLink.id,
@@ -6322,6 +6376,7 @@ react = __toESM(react);
 				const items = meta.action.payload;
 				return removeItem({
 					items,
+					tabsMenuId: tabList.id,
 					tabContentAreaId: tabContentArea.id
 				});
 			}
@@ -6329,6 +6384,7 @@ react = __toESM(react);
 				const items = meta.action.payload;
 				return duplicateItem({
 					items,
+					tabsMenuId: tabList.id,
 					tabContentAreaId: tabContentArea.id
 				});
 			}
@@ -6356,7 +6412,7 @@ react = __toESM(react);
 					title: "Tab"
 				},
 				Label: ItemLabel,
-				Content: ItemContent,
+				Content: itemContent,
 				Icon: () => null
 			}
 		});
@@ -6385,12 +6441,29 @@ react = __toESM(react);
 			label: (0, _wordpress_i18n.__)("Default", "elementor")
 		});
 	};
-	var ItemContent = ({ value, index }) => {
+	var ItemContent = ({ value, index, rootId, panelId }) => {
 		if (!value.id) return null;
+		const labelId = (0, _elementor_editor_elements.getContainer)(value.id)?.children?.find((child) => child.model.get("widgetType") === "e-paragraph")?.id;
+		const edit = (id) => {
+			showTabInPreview(rootId, index);
+			(0, _elementor_editor_elements.selectElement)(id);
+		};
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
 			p: 2,
 			gap: 1.5
-		}, /* @__PURE__ */ react.createElement(TabLabelControl, { elementId: value.id }), /* @__PURE__ */ react.createElement(SettingsField, {
+		}, react.createElement(_elementor_ui.Stack, {
+			direction: "row",
+			gap: 1,
+			sx: { flexWrap: "wrap" }
+		}, react.createElement(_elementor_ui.Button, {
+			size: "small",
+			disabled: !labelId,
+			onClick: () => edit(labelId)
+		}, (0, _wordpress_i18n.__)("编辑标签文本", "elementor")), react.createElement(_elementor_ui.Button, {
+			size: "small",
+			disabled: !panelId,
+			onClick: () => edit(panelId)
+		}, (0, _wordpress_i18n.__)("编辑内容面板", "elementor"))), /* @__PURE__ */ react.createElement(TabLabelControl, { elementId: value.id }), /* @__PURE__ */ react.createElement(SettingsField, {
 			bind: "default-active-tab",
 			propDisplayName: (0, _wordpress_i18n.__)("Tabs", "elementor")
 		}, /* @__PURE__ */ react.createElement(DefaultTabControl, { tabIndex: index })));
@@ -6421,7 +6494,7 @@ react = __toESM(react);
 	};
 	var TabLabelControl = ({ elementId }) => {
 		const label = (0, _elementor_editor_elements.useElementEditorSettings)(elementId)?.title ?? "";
-		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: 1 }, /* @__PURE__ */ react.createElement(_elementor_editor_controls.ControlFormLabel, null, (0, _wordpress_i18n.__)("Tab name", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.TextField, {
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: 1 }, /* @__PURE__ */ react.createElement(_elementor_editor_controls.ControlFormLabel, null, (0, _wordpress_i18n.__)("导航名称", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.TextField, {
 			size: "tiny",
 			value: label,
 			onChange: ({ target }) => {

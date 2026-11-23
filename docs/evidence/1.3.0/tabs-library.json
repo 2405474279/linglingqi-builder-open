@@ -1,0 +1,130 @@
+{
+  "mode": "tabs-library",
+  "version": "1.3.0",
+  "environment": [
+    "7.1.5",
+    "8.4.27",
+    "8.4.6",
+    "Twenty Twenty-Five"
+  ],
+  "sha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+  "cases": {
+    "editorSavedNativeRoot": {
+      "status": "passed",
+      "originalId": "2ec3dd0",
+      "originalLocal": "e-2ec3dd0-fd6e431",
+      "globalClass": "g-cc65178",
+      "sharedVariable": "e-gv-55432dd"
+    },
+    "twoCopiesAndRemovedOriginal": {
+      "status": "passed",
+      "source": "2ec3dd0",
+      "recursiveIdsFresh": true,
+      "copies": [
+        "6627f794fdeabc35",
+        "4c7e8ed8aac1e45c"
+      ],
+      "localIds": [
+        "e-6627f794fdeabc35-647c253",
+        "e-4c7e8ed8aac1e45c-41438c5"
+      ],
+      "bothUseSameGlobalClass": "g-cc65178",
+      "variable": "e-gv-55432dd",
+      "retainedImageAttachment": 200,
+      "ordinaryEditor": true
+    },
+    "copiesIndependentAfterSave": {
+      "status": "passed",
+      "desktop": [
+        "22px",
+        "22px"
+      ],
+      "mobile": [
+        "30px",
+        "38px"
+      ],
+      "uniqueAriaIds": true,
+      "independentSelection": true,
+      "onlySecondTextChanged": true,
+      "resolvedSharedVariable": true,
+      "sourceRetained": true,
+      "attachmentStatus": 200
+    }
+  },
+  "opens": [
+    {
+      "label": "admin-design-fixture",
+      "id": 201,
+      "ms": 32700,
+      "assets": [
+        {
+          "name": "editor-elements.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "editor-editing-panel.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-handler.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-preview-handler.min.js",
+          "ver": "1.3.0"
+        }
+      ]
+    },
+    {
+      "label": "ordinary-editor-reopened-shared-design",
+      "id": 201,
+      "ms": 21798,
+      "assets": [
+        {
+          "name": "editor-elements.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "editor-editing-panel.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-handler.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-preview-handler.min.js",
+          "ver": "1.3.0"
+        }
+      ]
+    },
+    {
+      "label": "ordinary-editor-copies-destination",
+      "id": 202,
+      "ms": 18321,
+      "assets": [
+        {
+          "name": "editor-elements.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "editor-editing-panel.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-handler.min.js",
+          "ver": "1.3.0"
+        },
+        {
+          "name": "tabs-preview-handler.min.js",
+          "ver": "1.3.0"
+        }
+      ]
+    }
+  ],
+  "jsErrors": [],
+  "http5xx": [],
+  "environmentWarnings": [],
+  "phpApplicationWarnings": [],
+  "status": "passed"
+}

@@ -175,17 +175,15 @@ class Atomic_Tab extends Atomic_Element_Base {
 
 	protected function build_template_context(): array {
 		$tabs_context = Render_Context::get( Atomic_Tabs::class );
-		$default_active_tab = $tabs_context['default-active-tab'];
-		$get_tab_index = $tabs_context['get-tab-index'];
-		$tabs_id = $tabs_context['tabs-id'];
-
-		$index = $get_tab_index( $this->get_id() );
-		$is_active = $default_active_tab === $index;
+		$get_tab_index = $tabs_context['get-tab-index'] ?? null;
+		$tabs_id = $tabs_context['tabs-id'] ?? null;
+		$index = is_callable( $get_tab_index ) ? $get_tab_index( $this->get_id() ) : null;
+		$has_parent_tabs = null !== $tabs_id && null !== $index;
 
 		return array_merge( $this->build_base_template_context(), [
-			'is_active' => $is_active,
-			'tab_id' => Atomic_Tabs::get_tab_id( $tabs_id, $index ),
-			'tab_content_id' => Atomic_Tabs::get_tab_content_id( $tabs_id, $index ),
+			'is_active' => ! $has_parent_tabs || ( $tabs_context['default-active-tab'] ?? 0 ) === $index,
+			'tab_id' => $has_parent_tabs ? Atomic_Tabs::get_tab_id( $tabs_id, $index ) : null,
+			'tab_content_id' => $has_parent_tabs ? Atomic_Tabs::get_tab_content_id( $tabs_id, $index ) : null,
 		] );
 	}
 }

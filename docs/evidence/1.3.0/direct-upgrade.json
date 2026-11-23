@@ -1,0 +1,74 @@
+{
+  "status": "passed",
+  "dashboard": {
+    "package": "linglingqi-builder-open-v1.3.0.zip",
+    "replace": true,
+    "activate": false,
+    "uploadMilliseconds": 45833,
+    "result": "replaced"
+  },
+  "baseline": {
+    "version": "1.1.0",
+    "compat": "4.3.6",
+    "wp": "6.8",
+    "php": "7.4.33",
+    "mysql": "8.4.6",
+    "active": [
+      "linglingqi-builder-open/linglingqi-builder.php"
+    ],
+    "theme": "twentytwentyfive",
+    "options": {
+      "e_opt_in_v4": "inactive",
+      "e_atomic_elements": "default",
+      "container": "(absent)",
+      "preference": "(absent)"
+    },
+    "prefersV4": null,
+    "runtime": {
+      "e_opt_in_v4": false,
+      "e_atomic_elements": false,
+      "container": true
+    }
+  },
+  "upgraded": {
+    "version": "1.3.0",
+    "compat": "4.3.6",
+    "wp": "6.8",
+    "php": "7.4.33",
+    "mysql": "8.4.6",
+    "active": [
+      "linglingqi-builder-open/linglingqi-builder.php"
+    ],
+    "theme": "twentytwentyfive",
+    "options": {
+      "e_opt_in_v4": "inactive",
+      "e_atomic_elements": "default",
+      "container": "(absent)",
+      "preference": "(absent)"
+    },
+    "prefersV4": false,
+    "runtime": {
+      "e_opt_in_v4": true,
+      "e_atomic_elements": true,
+      "container": true
+    }
+  },
+  "pageHashesAndNativeRevisionsPreserved": true,
+  "trees": {
+    "12": {
+      "modelSha": "7e4a8df0789af779ba814918053bf66217b02ff9cfae2e8b06a1005388494277",
+      "revisions": {
+        "13": "7e4a8df0789af779ba814918053bf66217b02ff9cfae2e8b06a1005388494277"
+      }
+    },
+    "14": {
+      "modelSha": "79810ea2c23c5fe1d62407d423088b5299cd301987de56e9a1a54e6a2e691203",
+      "revisions": {
+        "15": "79810ea2c23c5fe1d62407d423088b5299cd301987de56e9a1a54e6a2e691203"
+      }
+    }
+  },
+  "anonBeforeAndAfter": true,
+  "ordinaryEditorClassicTabsReopened": true,
+  "ordinaryEditorClassicTabsSaveHttp": 200
+}

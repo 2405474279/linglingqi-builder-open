@@ -1603,7 +1603,7 @@
 		exports.getTabContentId = getTabContentId;
 		var getChildren = (el, elementType) => {
 			const parent = el.parentElement;
-			return Array.from(parent.children).filter((child) => {
+			return Array.from(parent?.children ?? []).filter((child) => {
 				return child.dataset.element_type === elementType;
 			});
 		};
@@ -1666,80 +1666,119 @@
 
 //#endregion
 //#region modules/atomic-widgets/elements/atomic-tabs/handlers/atomic-tabs-handler.js
-	var _frontendHandlers = (globalThis.elementorV2.frontendHandlers);
-	var _alpinejs = (globalThis.elementorV2.alpinejs);
-	var _utils = require_utils();
-	var _editorTabsState = require_editor_tabs_state();
-	var SELECTED_CLASS = "e--selected";
-	(0, _frontendHandlers.register)({
-		elementType: "e-tabs",
-		id: "e-tabs-handler",
-		callback: ({ element, settings }) => {
-			const tabsId = element.dataset.id;
-			const defaultActiveTab = settings["default-active-tab"];
-			_alpinejs.Alpine.data(`eTabs${tabsId}`, () => ({
+	const { register } = globalThis.elementorV2.frontendHandlers;
+	const { Alpine } = globalThis.elementorV2.alpinejs;
+	const { TAB_ELEMENT_TYPE, TAB_CONTENT_ELEMENT_TYPE, getTabId, getTabContentId, getIndex, getChildren, getDirectTabCount } = require_utils();
+	const { getActiveTabId, setActiveTabIndex, validateActiveTab } = require_editor_tabs_state();
+
+	const SELECTED_CLASS = 'e--selected';
+
+	register( {
+		elementType: 'e-tabs',
+		id: 'e-tabs-handler',
+		callback: ( { element, settings } ) => {
+			const tabsId = element.dataset.eTabsInstance || element.dataset.id;
+			const defaultActiveTab = settings[ 'default-active-tab' ] || getTabId( tabsId, 0 );
+
+			Alpine.data( `eTabs${ tabsId }`, () => ( {
 				init() {
-					(0, _editorTabsState.validateActiveTab)(tabsId, (0, _utils.getDirectTabCount)(this.$el));
+					validateActiveTab( tabsId, getDirectTabCount( this.$el ) );
 				},
 				get activeTab() {
-					return (0, _editorTabsState.getActiveTabId)(tabsId, defaultActiveTab);
+					return getActiveTabId( tabsId, defaultActiveTab );
 				},
-				navigateTabs({ key, target: tab }) {
-					(0, _utils.getNextTab)(key, tab).focus();
+				activateTab( tab ) {
+					const index = getIndex( tab, TAB_ELEMENT_TYPE );
+					if ( index >= 0 ) {
+						setActiveTabIndex( tabsId, index );
+					}
+				},
+
+				navigateTabs( event ) {
+					const { key, currentTarget: tab } = event;
+					if ( ! [ 'ArrowLeft', 'ArrowRight', 'Home', 'End' ].includes( key ) ) {
+						return;
+					}
+
+					const tabs = getChildren( tab, TAB_ELEMENT_TYPE );
+					const currentIndex = tabs.indexOf( tab );
+					if ( currentIndex < 0 ) {
+						return;
+					}
+
+					let nextIndex;
+					if ( 'Home' === key ) {
+						nextIndex = 0;
+					} else if ( 'End' === key ) {
+						nextIndex = tabs.length - 1;
+					} else {
+						const isRtl = 'rtl' === window.getComputedStyle( tab ).direction;
+						const step = ( key === 'ArrowRight' ) !== isRtl ? 1 : -1;
+						nextIndex = ( currentIndex + step + tabs.length ) % tabs.length;
+					}
+
+					event.preventDefault();
+					setActiveTabIndex( tabsId, nextIndex );
+					tabs[ nextIndex ].focus();
 				},
 				tab: {
-					":id"() {
-						const index = (0, _utils.getIndex)(this.$el, _utils.TAB_ELEMENT_TYPE);
-						return (0, _utils.getTabId)(tabsId, index);
+					':id'() {
+						const index = getIndex( this.$el, TAB_ELEMENT_TYPE );
+
+						return getTabId( tabsId, index );
 					},
-					"@click"() {
-						(0, _editorTabsState.setActiveTabIndex)(tabsId, (0, _utils.getIndex)(this.$el, _utils.TAB_ELEMENT_TYPE));
+					'@click'() {
+						this.activateTab( this.$el );
 					},
-					"@keydown.arrow-right.prevent"(event) {
-						this.navigateTabs(event);
+					'@focus'() {
+						this.activateTab( this.$el );
 					},
-					"@keydown.arrow-left.prevent"(event) {
-						this.navigateTabs(event);
+					'@keydown'( event ) {
+						this.navigateTabs( event );
 					},
-					":class"() {
+					':class'() {
 						const id = this.$el.id;
-						return { [SELECTED_CLASS]: this.activeTab === id };
+
+						return { [ SELECTED_CLASS ]: this.activeTab === id };
 					},
-					":aria-selected"() {
+					':aria-selected'() {
 						const id = this.$el.id;
-						return this.activeTab === id ? "true" : "false";
+
+						return this.activeTab === id ? 'true' : 'false';
 					},
-					":tabindex"() {
+					':tabindex'() {
 						const id = this.$el.id;
-						return this.activeTab === id ? "0" : "-1";
+
+						return this.activeTab === id ? '0' : '-1';
 					},
-					":aria-controls"() {
-						const index = (0, _utils.getIndex)(this.$el, _utils.TAB_ELEMENT_TYPE);
-						return (0, _utils.getTabContentId)(tabsId, index);
-					}
+					':aria-controls'() {
+						const index = getIndex( this.$el, TAB_ELEMENT_TYPE );
+
+						return getTabContentId( tabsId, index );
+					},
 				},
+
 				tabContent: {
-					":aria-labelledby"() {
-						const index = (0, _utils.getIndex)(this.$el, _utils.TAB_CONTENT_ELEMENT_TYPE);
-						return (0, _utils.getTabId)(tabsId, index);
+					':aria-labelledby'() {
+						const index = getIndex( this.$el, TAB_CONTENT_ELEMENT_TYPE );
+
+						return getTabId( tabsId, index );
 					},
-					"x-show"() {
-						const index = (0, _utils.getIndex)(this.$el, _utils.TAB_CONTENT_ELEMENT_TYPE);
-						const tabId = (0, _utils.getTabId)(tabsId, index);
-						const isActive = this.activeTab === tabId;
-						this.$nextTick(() => {
-							this.$el.classList.toggle(SELECTED_CLASS, isActive);
-						});
-						return isActive;
+					':hidden'() {
+						return this.activeTab !== getTabId( tabsId, getIndex( this.$el, TAB_CONTENT_ELEMENT_TYPE ) );
 					},
-					":id"() {
-						const index = (0, _utils.getIndex)(this.$el, _utils.TAB_CONTENT_ELEMENT_TYPE);
-						return (0, _utils.getTabContentId)(tabsId, index);
-					}
-				}
-			}));
-		}
-	});
+					':class'() {
+						return { [ SELECTED_CLASS ]: this.activeTab === getTabId( tabsId, getIndex( this.$el, TAB_CONTENT_ELEMENT_TYPE ) ) };
+					},
+					':id'() {
+						const index = getIndex( this.$el, TAB_CONTENT_ELEMENT_TYPE );
+
+						return getTabContentId( tabsId, index );
+					},
+				},
+			} ) );
+		},
+	} );
 
 //#endregion
 })();

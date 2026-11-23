@@ -550,6 +550,7 @@ react = __toESM(react);
 			},
 			classLabels
 		}));
+		return postId;
 	}
 	async function addDocumentClasses(documentId) {
 		const [previewPostRes, frontendPostRes] = await Promise.all([apiClient.getStylesForPost(documentId, "preview"), apiClient.getStylesForPost(documentId, "frontend")]);
@@ -3169,8 +3170,12 @@ react = __toESM(react);
 //#region packages/packages/core/editor-global-classes/src/components/populate-store.tsx
 	function PopulateStore() {
 		(0, react.useEffect)(() => {
-			loadCurrentDocumentClasses();
+			let startup = loadCurrentDocumentClasses().catch(() => null);
 			(0, _elementor_editor_v1_adapters.registerDataHook)("after", "editor/documents/attach-preview", async () => {
+				const initialLoad = startup;
+				startup = null;
+				const postId = (0, _elementor_editor_documents.getCurrentDocument)()?.id;
+				if (initialLoad && postId && await initialLoad === postId) return;
 				await loadCurrentDocumentClasses();
 			});
 		}, []);

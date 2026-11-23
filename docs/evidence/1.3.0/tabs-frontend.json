@@ -1,0 +1,84 @@
+{
+  "mode": "tabs-frontend",
+  "version": "1.3.0",
+  "environment": [
+    "7.1.5",
+    "8.4.27",
+    "8.4.6",
+    "Twenty Twenty-Five"
+  ],
+  "sha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7",
+  "cases": {
+    "serverMarkup": {
+      "status": "passed",
+      "initialPanelVisibleWithoutJavaScript": true,
+      "otherPanelHidden": true,
+      "linkedAriaIds": true
+    },
+    "keyboardDesktop": {
+      "status": "passed",
+      "viewport": 1440,
+      "automatic": [
+        "ArrowRight",
+        "ArrowLeft",
+        "Home",
+        "End"
+      ],
+      "wrap": true,
+      "tabIntoActivePanel": true,
+      "noInactiveFocusableLink": true,
+      "ariaPairs": true,
+      "focus": {
+        "visible": true,
+        "style": "solid",
+        "width": "2px",
+        "stroke": "rgb(12, 13, 14)",
+        "shadow": "none"
+      },
+      "imageLoaded": true,
+      "assets": [
+        "tabs-handler.min.js"
+      ]
+    },
+    "touchAndLongLabel375": {
+      "status": "passed",
+      "trustedTouch": true,
+      "imageLoaded": true,
+      "metrics": {
+        "viewport": 375,
+        "documentWidth": 375,
+        "buttonClient": 156,
+        "buttonScroll": 156,
+        "stripClient": 275,
+        "stripScroll": 275,
+        "visibleLines": 7,
+        "fullLabel": "设备维护交接后的检查清单、现场反馈和长期记录管理说明，带有连续字符串 LongComposableTabLabelWithoutWhitespaceFor375Viewport",
+        "maxTouchPoints": 1,
+        "touches": [
+          {
+            "trusted": true,
+            "count": 1
+          },
+          {
+            "trusted": true,
+            "count": 1
+          }
+        ]
+      },
+      "ariaPairs": true,
+      "noWholePageOverflow": true
+    },
+    "rc1StoredTabsAndRtl": {
+      "status": "passed",
+      "originalNativeIdPreserved": "7876dbd",
+      "pairs": 3,
+      "rtlWrap": true
+    }
+  },
+  "opens": [],
+  "jsErrors": [],
+  "http5xx": [],
+  "environmentWarnings": [],
+  "phpApplicationWarnings": [],
+  "status": "passed"
+}

@@ -2,7 +2,7 @@
 Tags: builder, drag-and-drop, editor, layout
 Requires at least: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.0-rc.2
+Stable tag: 1.3.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,6 +19,21 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 3. 添加组件并预览，保存草稿或发布。
 
 == Changelog ==
+
+= 1.3.0 =
+* 默认使用 V4，支持安全切换新建页偏好、站内区块复用、原子 FAQ 和原子选项卡。
+
+= 1.3.0-rc.2 =
+* 开放 V4 原子选项卡，提供成对增删、重排、内容面板编辑和区块复用。
+* 补齐键盘导航、前台引用及窄屏布局，延续原生标签和面板数据结构。
+
+= 1.3.0-rc.1 =
+* 新增 V4 面板中的原子 FAQ，支持编辑问答、调整顺序、原生折叠和站内区块复用。
+* 保留既有经典手风琴、原子 Accordion 元素类型和属性键。
+
+= 1.2.0 =
+* 编辑器首次挂载复用启动时已读取的共享类与默认样式。
+* 等待 WordPress 登录状态检查初始化后再主动连接 Heartbeat，保留会话续期及文档锁。
 
 = 1.2.0-rc.2 =
 * 将新建页的 V4／经典偏好与现有原子内容的运行时分开。

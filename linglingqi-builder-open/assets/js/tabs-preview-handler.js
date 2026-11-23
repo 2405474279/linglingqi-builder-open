@@ -1602,8 +1602,7 @@
 		};
 		exports.getTabContentId = getTabContentId;
 		var getChildren = (el, elementType) => {
-			const parent = el.parentElement;
-			return Array.from(parent.children).filter((child) => {
+			return Array.from(el?.parentElement?.children ?? []).filter((child) => {
 				return child.dataset.element_type === elementType;
 			});
 		};
@@ -1674,14 +1673,28 @@
 		elementType: "e-tabs",
 		id: "e-tabs-preview-handler",
 		callback: ({ element, signal, listenToChildren }) => {
-			var _window;
-			(_window = window) === null || _window === void 0 || _window.parent.addEventListener("elementor/navigator/item/click", (event) => {
-				const { id, type } = event.detail;
-				if (type !== _utils.TAB_ELEMENT_TYPE && type !== _utils.TAB_CONTENT_ELEMENT_TYPE) return;
-				const targetElement = _alpinejs.Alpine.$data(element).$refs[id];
-				if (!targetElement) return;
-				const targetIndex = (0, _utils.getIndex)(targetElement, type);
-				(0, _editorTabsState.setActiveTabIndex)(element.dataset.id, targetIndex);
+			const instanceId = () => element.dataset.eTabsInstance || element.dataset.id;
+			const activateDescendant = (id) => {
+				if (!id) return;
+				const target = element.querySelector(`[data-id="${CSS.escape(String(id))}"]`);
+				const item = target?.closest(`[data-element_type="${_utils.TAB_ELEMENT_TYPE}"], [data-element_type="${_utils.TAB_CONTENT_ELEMENT_TYPE}"]`);
+				if (!item || item.closest('[data-e-type="e-tabs"]') !== element) return;
+				const index = (0, _utils.getIndex)(item, item.dataset.element_type);
+				if (index >= 0) (0, _editorTabsState.setActiveTabIndex)(instanceId(), index);
+			};
+			window.parent.addEventListener("elementor/navigator/item/click", (event) => {
+				activateDescendant(event.detail?.id);
+			}, { signal });
+			window.parent.addEventListener("elementor/commands/run/after", (event) => {
+				if (event.detail?.command !== "document/elements/select") return;
+				const selected = window.parent.elementor?.selection?.getElements?.()?.[0];
+				activateDescendant(selected?.id);
+			}, { signal });
+			window.parent.addEventListener("linglingqi/tabs/activate", (event) => {
+				const { rootId, index } = event.detail ?? {};
+				if (rootId === element.dataset.id && Number.isInteger(index) && index >= 0) {
+					(0, _editorTabsState.setActiveTabIndex)(instanceId(), index);
+				}
 			}, { signal });
 			listenToChildren([_utils.TAB_ELEMENT_TYPE, _utils.TAB_CONTENT_ELEMENT_TYPE]).render((event) => {
 				if (event.detail.element.closest("[data-e-type=\"e-tabs\"]") !== element) return;

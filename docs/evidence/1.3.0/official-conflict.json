@@ -1,0 +1,28 @@
+[
+  {
+    "type": "official-admin-upload",
+    "package": "elementor.4.3.6.zip",
+    "replace": false,
+    "activate": false,
+    "uploadMilliseconds": 41605,
+    "result": "installed"
+  },
+  {
+    "type": "conflict-official-with-own",
+    "status": 409,
+    "active": [
+      "linglingqi-builder-open/linglingqi-builder.php"
+    ]
+  },
+  {
+    "type": "conflict-own-with-official",
+    "status": 409,
+    "active": [
+      "elementor/elementor.php"
+    ]
+  },
+  {
+    "type": "browser-errors",
+    "errors": []
+  }
+]

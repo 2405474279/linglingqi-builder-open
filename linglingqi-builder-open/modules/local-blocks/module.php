@@ -19,7 +19,7 @@ final class Module extends Base_Module {
 	private const MODEL_META = '_llq_local_block_model';
 	private const NAMESPACE = 'linglingqi/v1';
 	private const HANDLE = 'linglingqi-local-blocks';
-	private const ROOT_TYPES = [ 'e-flexbox', 'e-div-block', 'e-grid' ];
+	private const ROOT_TYPES = [ 'e-flexbox', 'e-div-block', 'e-grid', 'e-accordion', 'e-tabs' ];
 	private const PAGE_SIZE = 30;
 
 	public function get_name() {
@@ -297,7 +297,7 @@ final class Module extends Base_Module {
 
 		if ( ! is_array( $model ) || ! in_array( $model['elType'] ?? '', self::ROOT_TYPES, true ) ||
 			! $this->is_native_tree( $model, 0, $count ) ) {
-			return $this->error( 'block_model', __( '请选择由可用原子元素组成的 V4 容器。', 'elementor' ), 400 );
+			return $this->error( 'block_model', __( '请选择由可用原子元素组成的 V4 容器、折叠区块或选项卡。', 'elementor' ), 400 );
 		}
 
 		$manager = Plugin::$instance->documents;

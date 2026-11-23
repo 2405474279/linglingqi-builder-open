@@ -5,7 +5,7 @@
 	const config = window.linglingqiLocalBlocks;
 	const appBar = window.elementorV2.editorAppBar;
 	const { __, sprintf } = wp.i18n;
-	const rootTypes = [ 'e-flexbox', 'e-div-block', 'e-grid' ];
+	const rootTypes = [ 'e-flexbox', 'e-div-block', 'e-grid', 'e-accordion', 'e-tabs' ];
 
 	async function request(documentId, path = '', method = 'GET', data, query = {}) {
 		const url = new URL(config.url, window.location.href);
@@ -171,12 +171,17 @@
 			const form = element('form', '', 'llq-blocks-form');
 
 			if (!container) {
-				form.append(element('p', __('在画布中选中一个 V4 容器，即可保存到本站区块。', 'elementor')));
+				form.append(element('p', __('在画布中选中一个 V4 容器、折叠区块或选项卡，即可保存到本站区块。', 'elementor')));
 				return form;
 			}
 
 			const name = textField(__('区块名称', 'elementor'));
-			const save = element('button', __('保存所选容器', 'elementor'), 'llq-blocks-primary');
+			const saveLabels = {
+				'e-accordion': __('保存所选折叠区块', 'elementor'),
+				'e-tabs': __('保存所选选项卡', 'elementor')
+			};
+			const saveLabel = saveLabels[container.type] ?? __('保存所选容器', 'elementor');
+			const save = element('button', saveLabel, 'llq-blocks-primary');
 			save.type = 'submit';
 			form.append(name.wrapper, save);
 			form.addEventListener('submit', event => {

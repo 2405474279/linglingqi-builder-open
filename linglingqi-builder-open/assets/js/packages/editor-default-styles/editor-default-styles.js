@@ -513,7 +513,10 @@ react = __toESM(react);
 		try {
 			const items = (await apiClient.all()).data.data;
 			(0, _elementor_store.__dispatch)(slice.actions.load({ data: items }));
-		} catch {}
+			return true;
+		} catch {
+			return false;
+		}
 	}
 
 //#endregion
@@ -521,9 +524,12 @@ react = __toESM(react);
 	var V2_PANEL_ROUTE = "panel/v2";
 	function PopulateStore() {
 		(0, react.useEffect)(() => {
-			loadDefaultStyles();
+			let startup = loadDefaultStyles();
 			(0, _elementor_editor_v1_adapters.registerDataHook)("after", "editor/documents/attach-preview", async () => {
+				const initialLoad = startup;
+				startup = null;
 				if (selectIsDirty((0, _elementor_store.__getState)())) return;
+				if (initialLoad && await initialLoad) return;
 				await loadDefaultStyles();
 			});
 			return (0, _elementor_editor_v1_adapters.__privateListenTo)((0, _elementor_editor_v1_adapters.routeCloseEvent)(V2_PANEL_ROUTE), () => {
