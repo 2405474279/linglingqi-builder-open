@@ -1,0 +1,50 @@
+[
+  {
+    "type": "zip",
+    "sha256": "c31d88d627df647fd180be02270d99e84b1da520f87a20ad9244f6e6834f2ea7"
+  },
+  {
+    "type": "admin-upload",
+    "package": "linglingqi-builder-open-v1.3.0.zip",
+    "replace": false,
+    "activate": true,
+    "uploadMilliseconds": 27180,
+    "result": "installed"
+  },
+  {
+    "type": "runtime",
+    "version": "1.3.0",
+    "compat": "4.3.6",
+    "wp": "7.1.5",
+    "php": "8.4.27",
+    "mysql": "8.4.6",
+    "active": [
+      "linglingqi-builder-open/linglingqi-builder.php"
+    ],
+    "theme": "twentytwentyfive",
+    "options": {
+      "e_opt_in_v4": "(absent)",
+      "e_atomic_elements": "(absent)",
+      "container": "(absent)",
+      "preference": "(absent)"
+    },
+    "prefersV4": true,
+    "runtime": {
+      "e_opt_in_v4": true,
+      "e_atomic_elements": true,
+      "container": true
+    }
+  },
+  {
+    "type": "browser-errors",
+    "errors": [
+      {
+        "message": "Transition was aborted because of invalid state. Page already revealed",
+        "url": "http://127.0.0.1:38359/wp-admin/update.php?action=upload-plugin",
+        "stack": [
+          ""
+        ]
+      }
+    ]
+  }
+]
