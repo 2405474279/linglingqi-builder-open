@@ -17,6 +17,8 @@
 
 1.3.1 首次接入 WordPress 后台在线更新。运行 1.3.0 或更早版本的站点须先上传 1.3.1 安装包覆盖一次。安装并启用后，后续 GitHub 正式版可从「仪表盘 → 更新」检查并安装。[在线更新条件](docs/安装与使用.md#后台在线更新)
 
+[1.3.1 发行说明](https://github.com/2405474279/linglingqi-builder-open/releases/tag/v1.3.1) · [升级验收与安装包校验](docs/升级说明.md#131-后台在线更新)
+
 ## 官网教程
 
 从安装和制作第一个页面开始，跟着图文示例学习 V4 原子元素、经典组件和旧页面维护。[入门教程](https://bpvips.com/3262) · [官网组件教程全集](https://bpvips.com/collection/linglingqi-builder)
