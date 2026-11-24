@@ -13,6 +13,7 @@ SLUG = "linglingqi-builder-open"
 BASELINE_SHA256 = "ad596a544cca67400d054359462d34de47c81b81a208edf5d0595bb89bd8418d"
 DIRECTORY_VERSION = "1.3.2"
 ESBUILD_VERSION = "0.25.12"
+DIRECTORY_UPLOAD_LIMIT = 10_000_000
 ENTRY = f"{SLUG}/linglingqi-builder.php"
 README = f"{SLUG}/readme.txt"
 UPDATER = f"{SLUG}/includes/linglingqi-release-updates.php"
@@ -25,6 +26,10 @@ JSX_REGION = re.compile(
     re.MULTILINE | re.DOTALL,
 )
 ABSPATH_GUARD = b"if ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n"
+FONT_LIBRARIES = (f"{SLUG}/assets/lib/eicons/", f"{SLUG}/assets/lib/font-awesome/")
+FONT_FACE = re.compile(rb"@font-face\s*\{[^}]*\}", re.IGNORECASE)
+FONT_SOURCE = re.compile(rb"(src\s*:\s*)([^;}]+)(;?)", re.IGNORECASE)
+FONT_URL = re.compile(rb"url\(\s*['\x22]?([^'\x22)\s?#]+)", re.IGNORECASE)
 
 
 def directory_entry(data):
@@ -299,7 +304,43 @@ def patch_query_identifiers(replace):
     )
 
 
-def build(baseline, output, php, esbuild):
+def compact_assets(source, files):
+    names = set(source.namelist())
+    duplicate_scripts = {
+        name for name in names
+        if name.startswith(f"{SLUG}/assets/js/") and name.endswith(".js")
+        and f"{name[:-3]}.min.js" in names
+    }
+    legacy_fonts = {
+        name for name in names
+        if name.startswith(FONT_LIBRARIES) and name.endswith((".eot", ".svg", ".ttf"))
+        and f"{name.rsplit('.', 1)[0]}.woff2" in names
+    }
+    legacy_font_names = {name.rsplit("/", 1)[1].encode() for name in legacy_fonts}
+
+    def compact_font_source(match):
+        kept = []
+        for part in match[2].split(b","):
+            url = FONT_URL.search(part)
+            if not url or url[1].rsplit(b"/", 1)[-1] not in legacy_font_names:
+                kept.append(part)
+        return match[1] + b",".join(kept).lstrip() + match[3] if kept else b""
+
+    for name in names:
+        if name.startswith(FONT_LIBRARIES) and name.endswith(".css"):
+            data = source.read(name)
+            files[name] = FONT_FACE.sub(lambda match: FONT_SOURCE.sub(compact_font_source, match[0]), data)
+
+    # WordPress core and other plugins still honor the site's SCRIPT_DEBUG value.
+    utils = f"{SLUG}/includes/utils.php"
+    old = b"return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;"
+    if files[utils].count(old) != 1:
+        raise ValueError("Expected one plugin asset debug selector.")
+    files[utils] = files[utils].replace(old, b"return false; // The directory ZIP ships production JavaScript.")
+    return duplicate_scripts | legacy_fonts
+
+
+def build(baseline, output, php, esbuild, include_debug_assets):
     if hashlib.sha256(baseline.read_bytes()).hexdigest() != BASELINE_SHA256:
         raise ValueError("The input must be the verified GitHub v1.3.1 release ZIP.")
 
@@ -312,8 +353,9 @@ def build(baseline, output, php, esbuild):
         migrated = migrate_php_domains(source, php)
         patch_review_php(migrated)
         migrated.update(externalize_jsx(source, esbuild))
+        omitted_assets = set() if include_debug_assets else compact_assets(source, migrated)
         for item in source.infolist():
-            if item.filename == UPDATER:
+            if item.filename == UPDATER or item.filename in omitted_assets:
                 continue
             data = migrated[item.filename] if item.filename in migrated else source.read(item)
             if item.filename == ENTRY:
@@ -327,6 +369,8 @@ def build(baseline, output, php, esbuild):
     with zipfile.ZipFile(output) as archive:
         if archive.testzip() or UPDATER in archive.namelist():
             raise ValueError("Submission ZIP verification failed.")
+        if not include_debug_assets and output.stat().st_size >= DIRECTORY_UPLOAD_LIMIT:
+            raise ValueError("The submission ZIP must be under 10 MB.")
         print(f"{len(archive.namelist()):,} files, {output.stat().st_size:,} bytes")
     print(f"SHA-256 {hashlib.sha256(output.read_bytes()).hexdigest()}")
 
@@ -337,5 +381,7 @@ if __name__ == "__main__":
     parser.add_argument("output", type=Path)
     parser.add_argument("--php", default="php", help="Path to the PHP 7.4+ CLI")
     parser.add_argument("--esbuild", default="esbuild", help=f"Path to esbuild {ESBUILD_VERSION}")
+    parser.add_argument("--include-debug-assets", action="store_true",
+                        help="Build the full-size developer ZIP with unminified JavaScript and legacy fonts")
     args = parser.parse_args()
-    build(args.baseline, args.output, args.php, args.esbuild)
+    build(args.baseline, args.output, args.php, args.esbuild, args.include_debug_assets)
