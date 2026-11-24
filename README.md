@@ -6,13 +6,20 @@
 
 | 版本 | 用途 | 获取方式 |
 | --- | --- | --- |
-| **1.3.0 稳定版** | 默认 V4、安全切换、站内区块、原子 FAQ 和原子选项卡 | [下载 1.3.0 安装 ZIP](https://github.com/2405474279/linglingqi-builder-open/releases/download/v1.3.0/linglingqi-builder-open-v1.3.0.zip) |
+| **1.3.1 稳定版** | 后台在线更新、默认 V4、站内区块、原子 FAQ 和原子选项卡 | [下载 1.3.1 安装 ZIP](https://github.com/2405474279/linglingqi-builder-open/releases/download/v1.3.1/linglingqi-builder-open-v1.3.1.zip) |
+| **1.3.0 历史稳定版** | 默认 V4、安全切换、站内区块、原子 FAQ 和原子选项卡 | [下载 1.3.0 安装 ZIP](https://github.com/2405474279/linglingqi-builder-open/releases/download/v1.3.0/linglingqi-builder-open-v1.3.0.zip) |
 | **1.1.0 历史稳定版** | 经典编辑器及「基础」「常规」组件 | [下载 1.1.0 安装 ZIP](https://github.com/2405474279/linglingqi-builder-open/releases/download/v1.1.0/linglingqi-builder-open-v1.1.0.zip) |
 | **1.3.0-rc.2 候选版** | 在独立测试站验证 V4 原子选项卡、键盘和站内复用 | [候选包校验与验收](docs/V4候选验收.md) |
 | **1.3.0-rc.1 候选版** | 在独立测试站验证 V4 原子 FAQ、原生折叠和站内复用 | [候选包校验与验收](docs/V4候选验收.md) |
 | **1.2.0 正式版候选** | 在独立测试站验证加载表现、V4／经典偏好和旧版升级 | [候选包校验值与本地验收](docs/V4候选验收.md) |
 
 从 WordPress 后台上传插件 ZIP 并启用，再从「页面」打开「使用凌凌漆编辑」。同一站点只启用一个 Elementor 或凌凌漆版本。已有站点先备份数据库和媒体，并在副本上按目标版本的步骤升级。[安装与使用](docs/安装与使用.md) · [升级与回退](docs/升级说明.md)
+
+1.3.1 首次接入 WordPress 后台在线更新。运行 1.3.0 或更早版本的站点须先上传 1.3.1 安装包覆盖一次。安装并启用后，后续 GitHub 正式版可从「仪表盘 → 更新」检查并安装。[在线更新条件](docs/安装与使用.md#后台在线更新)
+
+## 官网教程
+
+从安装和制作第一个页面开始，跟着图文示例学习 V4 原子元素、经典组件和旧页面维护。[入门教程](https://bpvips.com/3262) · [官网组件教程全集](https://bpvips.com/collection/linglingqi-builder)
 
 ## 1.3.0 功能
 

@@ -2,7 +2,7 @@
 Tags: builder, drag-and-drop, editor, layout
 Requires at least: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,6 +19,9 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 3. 添加组件并预览，保存草稿或发布。
 
 == Changelog ==
+
+= 1.3.1 =
+* 接入 WordPress 原生插件更新，检查凌凌漆开源版的 GitHub 正式 Release。旧版需先上传一次 1.3.1 安装包。
 
 = 1.3.0 =
 * 默认使用 V4，支持安全切换新建页偏好、站内区块复用、原子 FAQ 和原子选项卡。

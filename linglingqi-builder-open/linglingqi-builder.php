@@ -2,10 +2,11 @@
 /**
  * Plugin Name: 凌凌漆可视化编辑器（开源版）
  * Description: WordPress 可视化编辑器，支持响应式布局及 Elementor 基础和常规组件。
- * Version: 1.3.0
+ * Version: 1.3.1
  * Author: 凌凌漆
  * Requires PHP: 7.4
  * Requires at least: 6.8
+ * Update URI: https://github.com/2405474279/linglingqi-builder-open
  * Text Domain: elementor
  *
  * @package LingLingQiBuilder
@@ -51,7 +52,7 @@ if ( defined( 'ELEMENTOR_VERSION' ) ) {
 	return;
 }
 
-define( 'ELEMENTOR_VERSION', '1.3.0' );
+define( 'ELEMENTOR_VERSION', '1.3.1' );
 
 /**
  * Compatibility baseline of the upstream codebase this build is derived from.
@@ -67,6 +68,8 @@ define( 'ELEMENTOR_MINIMUM_WP_VERSION', '6.8' );
 define( 'ELEMENTOR__FILE__', __FILE__ );
 define( 'ELEMENTOR_PLUGIN_BASE', plugin_basename( ELEMENTOR__FILE__ ) );
 define( 'ELEMENTOR_PATH', plugin_dir_path( ELEMENTOR__FILE__ ) );
+
+require_once ELEMENTOR_PATH . 'includes/linglingqi-release-updates.php';
 
 if ( defined( 'ELEMENTOR_TESTS' ) && ELEMENTOR_TESTS ) {
 	define( 'ELEMENTOR_URL', 'file://' . ELEMENTOR_PATH );
